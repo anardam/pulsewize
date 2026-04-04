@@ -1,22 +1,17 @@
 "use client";
 
-// src/components/reports/ReportFilters.tsx
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
+import { Search, SlidersHorizontal } from "lucide-react";
 
-interface ReportFiltersProps {
+interface Props {
   platform: string;
   search: string;
   dateFrom: string;
   dateTo: string;
 }
 
-export function ReportFilters({
-  platform,
-  search,
-  dateFrom,
-  dateTo,
-}: ReportFiltersProps) {
+export function ReportFilters({ platform, search, dateFrom, dateTo }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -57,71 +52,60 @@ export function ReportFilters({
     router.push(buildUrl({ dateTo: e.target.value }));
   };
 
-  // cleanup debounce on unmount
   useEffect(() => {
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
   }, []);
 
-  const controlClass =
-    "bg-[#141414] border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-[#e8e4df] focus:outline-none focus:ring-2 focus:ring-rose-500/30 focus:border-rose-500/30 transition-colors";
+  const inputClass =
+    "bg-[#141414] border border-white/[0.06] rounded-xl px-3.5 py-2.5 text-sm text-[#e8e4df] focus:outline-none focus:ring-2 focus:ring-rose-500/30 focus:border-rose-500/30 transition-all duration-200 placeholder:text-[#5a5550]";
 
   return (
-    <div className="flex flex-wrap gap-3 mt-4">
-      {/* Platform dropdown */}
-      <select
-        value={platform}
-        onChange={handlePlatformChange}
-        className={controlClass}
-        aria-label="Filter by platform"
-      >
-        <option value="">All Platforms</option>
-        <option value="instagram">Instagram</option>
-        <option value="twitter">Twitter</option>
-        <option value="tiktok">TikTok</option>
-        <option value="youtube">YouTube</option>
-        <option value="linkedin">LinkedIn</option>
-        <option value="facebook">Facebook</option>
-      </select>
-
-      {/* Search by handle */}
-      <input
-        type="text"
-        placeholder="Search by handle…"
-        defaultValue={search}
-        onChange={handleSearchChange}
-        className={`${controlClass} min-w-[180px]`}
-        aria-label="Search by handle"
-      />
-
-      {/* Date From */}
-      <div className="flex items-center gap-1.5">
-        <label className="text-xs text-[#8a8580]" htmlFor="dateFrom">
-          From
-        </label>
+    <div className="flex flex-col sm:flex-row flex-wrap gap-2.5">
+      <div className="relative flex-1 min-w-[200px]">
+        <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5a5550]" />
         <input
-          id="dateFrom"
+          type="text"
+          placeholder="Search by handle..."
+          defaultValue={search}
+          onChange={handleSearchChange}
+          className={`${inputClass} pl-10 w-full`}
+          aria-label="Search by handle"
+        />
+      </div>
+      <div className="relative">
+        <SlidersHorizontal size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5a5550] pointer-events-none" />
+        <select
+          value={platform}
+          onChange={handlePlatformChange}
+          className={`${inputClass} pl-9 pr-8 appearance-none cursor-pointer`}
+          aria-label="Filter by platform"
+        >
+          <option value="">All Platforms</option>
+          <option value="instagram">Instagram</option>
+          <option value="twitter">Twitter/X</option>
+          <option value="tiktok">TikTok</option>
+          <option value="youtube">YouTube</option>
+          <option value="linkedin">LinkedIn</option>
+          <option value="facebook">Facebook</option>
+        </select>
+      </div>
+      <div className="flex items-center gap-2">
+        <input
           type="date"
           value={dateFrom}
           onChange={handleDateFromChange}
-          className={controlClass}
-          aria-label="Filter from date"
+          className={`${inputClass} w-[140px]`}
+          aria-label="From date"
         />
-      </div>
-
-      {/* Date To */}
-      <div className="flex items-center gap-1.5">
-        <label className="text-xs text-[#8a8580]" htmlFor="dateTo">
-          To
-        </label>
+        <span className="text-[11px] text-[#5a5550]">to</span>
         <input
-          id="dateTo"
           type="date"
           value={dateTo}
           onChange={handleDateToChange}
-          className={controlClass}
-          aria-label="Filter to date"
+          className={`${inputClass} w-[140px]`}
+          aria-label="To date"
         />
       </div>
     </div>

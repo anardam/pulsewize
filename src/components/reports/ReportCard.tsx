@@ -1,5 +1,15 @@
-// src/components/reports/ReportCard.tsx
+"use client";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+import {
+  FaInstagram,
+  FaYoutube,
+  FaXTwitter,
+  FaTiktok,
+  FaLinkedinIn,
+  FaFacebookF,
+} from "react-icons/fa6";
 import type { AnalysisReport } from "@/lib/types";
 
 interface ReportRow {
@@ -11,78 +21,92 @@ interface ReportRow {
   report_data: AnalysisReport;
 }
 
-interface ReportCardProps {
+interface Props {
   report: ReportRow;
+  index?: number;
 }
 
-function ScoreBadge({ score }: { score: number }) {
-  if (score === 0) {
-    return (
-      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border text-[#8a8580] bg-white/5 border-white/[0.06]">
-        —
-      </span>
-    );
-  }
+const PLATFORM_META: Record<string, { icon: React.ElementType; color: string; label: string }> = {
+  instagram: { icon: FaInstagram, color: "#E1306C", label: "Instagram" },
+  youtube: { icon: FaYoutube, color: "#FF0000", label: "YouTube" },
+  twitter: { icon: FaXTwitter, color: "#1DA1F2", label: "Twitter/X" },
+  tiktok: { icon: FaTiktok, color: "#00f2ea", label: "TikTok" },
+  linkedin: { icon: FaLinkedinIn, color: "#0A66C2", label: "LinkedIn" },
+  facebook: { icon: FaFacebookF, color: "#1877F2", label: "Facebook" },
+};
 
-  let colorClasses: string;
-  if (score >= 70) {
-    colorClasses = "text-green-400 bg-green-500/10 border-green-500/20";
-  } else if (score >= 40) {
-    colorClasses = "text-yellow-400 bg-yellow-500/10 border-yellow-500/20";
-  } else {
-    colorClasses = "text-red-400 bg-red-500/10 border-red-500/20";
-  }
+function ScoreBadge({ score }: { score: number }) {
+  if (score === 0) return null;
+
+  const config =
+    score >= 70
+      ? { bg: "bg-emerald-500/15", text: "text-emerald-400", label: "Strong" }
+      : score >= 40
+        ? { bg: "bg-amber-500/15", text: "text-amber-400", label: "Average" }
+        : { bg: "bg-red-500/15", text: "text-red-400", label: "Needs work" };
 
   return (
-    <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${colorClasses}`}
-    >
-      {score}
-    </span>
+    <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg ${config.bg}`}>
+      <span className={`text-lg font-bold ${config.text}`}>{score}</span>
+      <span className={`text-[10px] font-medium ${config.text} opacity-70`}>{config.label}</span>
+    </div>
   );
 }
 
-export function ReportCard({ report }: ReportCardProps) {
-  const score =
-    (report.report_data as AnalysisReport).profileScore?.overall ?? 0;
+export function ReportCard({ report, index = 0 }: Props) {
+  const score = report.report_data?.profileScore?.overall ?? 0;
+  const meta = PLATFORM_META[report.platform] ?? PLATFORM_META.instagram;
+  const Icon = meta.icon;
 
   const formattedDate = (() => {
     try {
       return new Intl.DateTimeFormat("en-US", {
         month: "short",
         day: "numeric",
-        year: "numeric",
       }).format(new Date(report.analyzed_at));
     } catch {
-      return report.analyzed_at;
+      return "";
     }
   })();
 
   return (
-    <Link
-      href={`/reports/${report.id}`}
-      className="block bg-[#141414] border border-white/[0.06] rounded-xl p-5 hover:border-rose-500/20 transition-colors"
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.05, duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
     >
-      {/* Top row: platform badge + report type */}
-      <div className="flex items-center gap-2">
-        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20 capitalize">
-          {report.platform}
-        </span>
-        {report.report_type && report.report_type !== "analysis" && (
-          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-white/5 text-[#8a8580] border border-white/[0.06] capitalize">
-            {report.report_type}
-          </span>
-        )}
-      </div>
+      <Link
+        href={`/reports/${report.id}`}
+        className="group block rounded-xl border border-white/[0.06] bg-[#141414] p-5 hover:border-white/[0.12] hover:bg-[#181818] transition-all duration-300"
+      >
+        {/* Top: platform + date */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <div
+              className="h-7 w-7 rounded-lg flex items-center justify-center"
+              style={{ backgroundColor: `${meta.color}15` }}
+            >
+              <Icon size={13} style={{ color: meta.color }} />
+            </div>
+            <span className="text-[11px] font-medium text-[#8a8580]">{meta.label}</span>
+          </div>
+          <span className="text-[11px] text-[#5a5550]">{formattedDate}</span>
+        </div>
 
-      {/* Middle: username */}
-      <p className="text-base font-semibold mt-3">@{report.username}</p>
+        {/* Username */}
+        <p className="text-base font-semibold text-[#e8e4df] group-hover:text-white transition-colors">
+          @{report.username}
+        </p>
 
-      {/* Bottom: date + score badge */}
-      <div className="flex items-center justify-between mt-3">
-        <span className="text-xs text-[#8a8580]">{formattedDate}</span>
-        <ScoreBadge score={score} />
-      </div>
-    </Link>
+        {/* Bottom: score + arrow */}
+        <div className="flex items-center justify-between mt-4">
+          <ScoreBadge score={score} />
+          <ArrowUpRight
+            size={15}
+            className="text-[#5a5550] group-hover:text-rose-400 transition-colors"
+          />
+        </div>
+      </Link>
+    </motion.div>
   );
 }

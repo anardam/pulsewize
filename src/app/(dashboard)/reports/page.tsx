@@ -66,13 +66,21 @@ export default async function ReportsPage({ searchParams }: Props) {
     <>
       <TopNav activePath="/reports" />
       <main className="min-h-screen bg-[#0d0d0d]">
-        <div className="max-w-5xl mx-auto px-6 py-8">
-          {/* Page header */}
-          <div className="flex items-center justify-between mb-2">
-            <h1 className="text-xl font-semibold">Reports</h1>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+            <div>
+              <p className="text-xs font-medium tracking-[0.15em] uppercase text-rose-400/80 mb-1">
+                History
+              </p>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Reports</h1>
+              {(count ?? 0) > 0 && (
+                <p className="text-sm text-[#8a8580] mt-1">{count} total reports</p>
+              )}
+            </div>
             <Link
               href="/analyze"
-              className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-rose-600 hover:bg-rose-500 hover:shadow-lg hover:shadow-rose-600/20 text-white transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-rose-600 hover:bg-rose-500 text-white transition-all duration-200 hover:shadow-xl hover:shadow-rose-600/20 w-fit"
             >
               New analysis
             </Link>
@@ -89,29 +97,31 @@ export default async function ReportsPage({ searchParams }: Props) {
           {/* Results */}
           {reports && reports.length > 0 ? (
             <>
-              <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {reports.map((r) => (
-                  <ReportCard key={r.id} report={r} />
+              <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {reports.map((r, i) => (
+                  <ReportCard key={r.id} report={r} index={i} />
                 ))}
               </div>
               {totalPages > 1 && (
-                <div className="mt-6">
+                <div className="mt-8">
                   <Pagination page={page} totalPages={totalPages} />
                 </div>
               )}
             </>
           ) : (
-            <div className="mt-6 bg-[#141414] border border-white/[0.06] rounded-xl p-10 flex flex-col items-center text-center">
-              <FileText size={40} className="text-[#8a8580]" />
-              <p className="text-sm font-medium mt-4">No reports found</p>
-              <p className="text-sm text-[#8a8580] mt-1">
+            <div className="mt-8 rounded-xl border border-dashed border-white/[0.08] bg-[#141414]/50 p-14 flex flex-col items-center text-center">
+              <div className="h-14 w-14 rounded-full bg-rose-500/10 flex items-center justify-center mb-5">
+                <FileText size={24} className="text-rose-400" />
+              </div>
+              <p className="text-base font-semibold text-[#e8e4df]">No reports yet</p>
+              <p className="text-sm text-[#8a8580] mt-1.5 max-w-[300px]">
                 {hasFilters
-                  ? "Try clearing your filters"
-                  : "Run your first analysis to see reports here"}
+                  ? "No reports match your filters. Try adjusting your search."
+                  : "Run your first analysis and your reports will appear here."}
               </p>
               <Link
                 href="/analyze"
-                className="mt-4 inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-rose-600 hover:bg-rose-500 hover:shadow-lg hover:shadow-rose-600/20 text-white transition-colors"
+                className="mt-6 inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-rose-600 hover:bg-rose-500 text-white transition-all duration-200 hover:shadow-lg hover:shadow-rose-600/20"
               >
                 Analyze a profile
               </Link>

@@ -114,52 +114,73 @@ export default async function DashboardPage() {
     <>
       <TopNav activePath="/dashboard" />
       <main className="min-h-screen bg-[#0d0d0d]">
-        <div className="max-w-5xl mx-auto px-6 py-8">
-          {/* Header + CTA */}
-          <div className="flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
             <div>
-              <h1 className="text-xl font-semibold">Dashboard</h1>
-              <p className="text-sm text-[#8a8580] mt-1">
-                {monthName} overview
+              <p className="text-xs font-medium tracking-[0.15em] uppercase text-rose-400/80 mb-1">
+                {monthName}
               </p>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+                Dashboard
+              </h1>
             </div>
             <Link
               href="/analyze"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium bg-rose-600 hover:bg-rose-500 hover:shadow-lg hover:shadow-rose-600/20 text-white transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-rose-600 hover:bg-rose-500 text-white transition-all duration-200 hover:shadow-xl hover:shadow-rose-600/20 w-fit"
             >
               <Search className="h-4 w-4" />
-              Analyze a profile
+              New analysis
             </Link>
           </div>
 
-          {/* Stats row */}
-          <div className="mt-6">
-            <StatsCards
-              totalReports={totalReports}
-              platformCount={platformCount}
-              plan={plan}
-              usageCount={usageCount}
-            />
-          </div>
+          {/* Stats */}
+          <StatsCards
+            totalReports={totalReports}
+            platformCount={platformCount}
+            plan={plan}
+            usageCount={usageCount}
+          />
 
-          {/* Recent activity */}
-          <div className="mt-8">
-            <h2 className="text-base font-semibold mb-4">Recent activity</h2>
-            <ActivityFeed reports={recentReports ?? []} />
-          </div>
-
-          {/* Growth chart */}
-          {topHandle && (
-            <div className="mt-8">
-              <h2 className="text-base font-semibold mb-4">
-                Growth trend &mdash; @{topHandle}
-              </h2>
-              <GrowthChartWrapper
-                data={chartPoints}
-                title={`@${topHandle} — engagement, score & reach`}
-              />
+          {/* Two-column layout on desktop */}
+          <div className="mt-8 grid grid-cols-1 lg:grid-cols-5 gap-6">
+            {/* Activity — wider */}
+            <div className="lg:col-span-3">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-sm font-semibold tracking-wide uppercase text-[#8a8580]">
+                  Recent Activity
+                </h2>
+                <Link
+                  href="/reports"
+                  className="text-xs text-rose-400/80 hover:text-rose-300 transition-colors"
+                >
+                  View all
+                </Link>
+              </div>
+              <ActivityFeed reports={recentReports ?? []} />
             </div>
-          )}
+
+            {/* Chart — narrower */}
+            <div className="lg:col-span-2">
+              <h2 className="text-sm font-semibold tracking-wide uppercase text-[#8a8580] mb-4">
+                {topHandle ? `Growth — @${topHandle}` : "Growth Trends"}
+              </h2>
+              {topHandle ? (
+                <div className="rounded-xl border border-white/[0.06] bg-[#141414] p-4">
+                  <GrowthChartWrapper
+                    data={chartPoints}
+                    title={`@${topHandle}`}
+                  />
+                </div>
+              ) : (
+                <div className="rounded-xl border border-dashed border-white/[0.08] bg-[#141414]/50 p-10 flex flex-col items-center text-center">
+                  <p className="text-sm text-[#8a8580]">
+                    Charts appear after your second analysis of the same profile.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </main>
     </>
