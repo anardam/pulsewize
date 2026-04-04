@@ -116,21 +116,66 @@ export default async function DashboardPage() {
       <main className="min-h-screen bg-[#0d0d0d]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
-            <div>
-              <p className="text-xs font-medium tracking-[0.15em] uppercase text-rose-400/80 mb-1">
-                {monthName}
-              </p>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-                Dashboard
-              </h1>
-            </div>
+          <div className="mb-8">
+            <p className="text-xs font-medium tracking-[0.15em] uppercase text-rose-400/80 mb-1">
+              {monthName}
+            </p>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+              Dashboard
+            </h1>
+          </div>
+
+          {/* Quick Actions — clickable navigation cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
             <Link
               href="/analyze"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-rose-600 hover:bg-rose-500 text-white transition-all duration-200 hover:shadow-xl hover:shadow-rose-600/20 w-fit"
+              className="group relative overflow-hidden rounded-xl border border-rose-500/20 bg-gradient-to-br from-rose-500/10 to-transparent p-5 hover:border-rose-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-rose-600/10"
             >
-              <Search className="h-4 w-4" />
-              New analysis
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-rose-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <Search className="h-5 w-5 text-rose-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-[#e8e4df]">New Analysis</p>
+                  <p className="text-xs text-[#8a8580]">Analyze any social profile</p>
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href="/reports"
+              className="group relative overflow-hidden rounded-xl border border-white/[0.06] bg-[#141414] p-5 hover:border-white/[0.1] transition-all duration-300"
+            >
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-400">
+                    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                    <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-[#e8e4df]">Reports</p>
+                  <p className="text-xs text-[#8a8580]">{totalReports} saved reports</p>
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href="/settings"
+              className="group relative overflow-hidden rounded-xl border border-white/[0.06] bg-[#141414] p-5 hover:border-white/[0.1] transition-all duration-300"
+            >
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-amber-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-amber-400">
+                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-[#e8e4df]">Settings</p>
+                  <p className="text-xs text-[#8a8580]">Account & billing</p>
+                </div>
+              </div>
             </Link>
           </div>
 
