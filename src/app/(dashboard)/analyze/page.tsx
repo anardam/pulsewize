@@ -1,25 +1,65 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Instagram,
+  Youtube,
+  Twitter,
+  Linkedin,
+  Facebook,
+  Music2,
+  ArrowLeft,
+  Search,
+  Bookmark,
+  BookmarkCheck,
+  Sparkles,
+  RotateCcw,
+} from "lucide-react";
 import LoadingScreen from "@/components/LoadingScreen";
 import ManualEntryForm from "@/components/ManualEntryForm";
 import ReportDashboard from "@/components/ReportDashboard";
-import PlatformGrid from "@/components/PlatformGrid";
 import { UpgradePrompt } from "@/components/billing/UpgradePrompt";
 import type { AnalysisReport, ManualProfileInput } from "@/lib/types";
 
-type AnalyzeState = "platform" | "input" | "loading" | "manual" | "results" | "error" | "upgrade";
+type AnalyzeState =
+  | "platform"
+  | "input"
+  | "loading"
+  | "manual"
+  | "results"
+  | "error"
+  | "upgrade";
 
 const LAST_PLATFORM_KEY = "sociallens_last_platform";
 
-const PLATFORM_NAMES: Record<string, string> = {
-  instagram: "Instagram",
-  youtube: "YouTube",
-  twitter: "Twitter/X",
-  tiktok: "TikTok",
-  linkedin: "LinkedIn",
-  facebook: "Facebook",
+interface SavedProfile {
+  id: string;
+  platform: string;
+  username: string;
+  display_name: string;
+  last_analyzed_at: string;
+}
+
+const PLATFORMS = [
+  { id: "instagram", label: "Instagram", icon: Instagram, color: "#E1306C" },
+  { id: "youtube", label: "YouTube", icon: Youtube, color: "#FF0000" },
+  { id: "twitter", label: "Twitter/X", icon: Twitter, color: "#1DA1F2" },
+  { id: "tiktok", label: "TikTok", icon: Music2, color: "#00f2ea" },
+  { id: "linkedin", label: "LinkedIn", icon: Linkedin, color: "#0A66C2" },
+  { id: "facebook", label: "Facebook", icon: Facebook, color: "#1877F2" },
+];
+
+const fadeUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -10 },
+  transition: { duration: 0.4, ease: [0.23, 1, 0.32, 1] },
+};
+
+const stagger = {
+  animate: { transition: { staggerChildren: 0.06 } },
 };
 
 export default function AnalyzePage() {
@@ -34,12 +74,63 @@ export default function AnalyzePage() {
   const [username, setUsername] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [report, setReport] = useState<AnalysisReport | null>(null);
+  const [savedProfiles, setSavedProfiles] = useState<SavedProfile[]>([]);
+  const [saving, setSaving] = useState(false);
+
+  // Load saved profiles
+  useEffect(() => {
+    async function load() {
+      try {
+        const res = await fetch("/api/saved-profiles");
+        const data = await res.json();
+        if (data.success) setSavedProfiles(data.data);
+      } catch {
+        // non-fatal
+      }
+    }
+    load();
+  }, []);
 
   function handlePlatformSelect(p: string) {
     setPlatform(p);
     localStorage.setItem(LAST_PLATFORM_KEY, p);
     setState("input");
   }
+
+  function handleSavedProfileSelect(profile: SavedProfile) {
+    setPlatform(profile.platform);
+    setUsername(profile.username);
+    localStorage.setItem(LAST_PLATFORM_KEY, profile.platform);
+    setState("input");
+  }
+
+  async function handleSaveProfile() {
+    if (!username.trim()) return;
+    setSaving(true);
+    try {
+      const res = await fetch("/api/saved-profiles", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ platform, username: username.trim() }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSavedProfiles((prev) => {
+          const filtered = prev.filter(
+            (p) => !(p.platform === platform && p.username === username.trim())
+          );
+          return [data.data, ...filtered];
+        });
+      }
+    } catch {
+      // non-fatal
+    }
+    setSaving(false);
+  }
+
+  const isProfileSaved = savedProfiles.some(
+    (p) => p.platform === platform && p.username === username.trim()
+  );
 
   async function handleAnalyze(e: React.FormEvent) {
     e.preventDefault();
@@ -76,17 +167,21 @@ export default function AnalyzePage() {
         return;
       }
       if (response.status === 429) {
-        // Non-limit 429 (rate limiting, etc.) — show plain error
         setError(data.error ?? "Too many requests. Please try again later.");
         setState("input");
         return;
       }
 
       if (!data.success || !data.report) {
-        setError(data.error ?? "Something went wrong. Please try again in a moment.");
+        setError(
+          data.error ?? "Something went wrong. Please try again in a moment."
+        );
         setState("error");
         return;
       }
+
+      // Auto-save profile on successful analysis
+      handleSaveProfile();
 
       setReport(data.report);
       setState("results");
@@ -123,30 +218,11 @@ export default function AnalyzePage() {
     setError(null);
   }
 
-  if (state === "loading") {
-    return <LoadingScreen />;
-  }
-
-  if (state === "platform") {
-    return (
-      <main className="min-h-screen bg-[#0a0a0f]">
-        <div className="max-w-4xl mx-auto px-6 py-8">
-          <h1 className="text-xl font-semibold text-white">Select a platform</h1>
-          <p className="text-sm text-muted-foreground mt-1 mb-6">
-            Choose the platform you want to analyze.
-          </p>
-          <PlatformGrid
-            selectedPlatform={platform}
-            onSelect={handlePlatformSelect}
-          />
-        </div>
-      </main>
-    );
-  }
+  if (state === "loading") return <LoadingScreen />;
 
   if (state === "manual") {
     return (
-      <main className="min-h-screen bg-[#0a0a0f]">
+      <main className="min-h-screen bg-[#0d0d0d]">
         <div className="max-w-3xl mx-auto px-6 py-8">
           <ManualEntryForm
             username={username}
@@ -161,7 +237,12 @@ export default function AnalyzePage() {
 
   if (state === "results" && report) {
     return (
-      <main className="min-h-screen bg-[#0a0a0f]">
+      <motion.main
+        className="min-h-screen bg-[#0d0d0d]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
         <div className="max-w-6xl mx-auto px-6 py-8">
           <ReportDashboard
             report={report}
@@ -169,104 +250,304 @@ export default function AnalyzePage() {
             onNewAnalysis={() => {
               setState("platform");
               setReport(null);
+              setUsername("");
             }}
           />
         </div>
-      </main>
-    );
-  }
-
-  if (state === "error") {
-    return (
-      <main className="min-h-screen bg-[#0a0a0f]">
-        <div className="max-w-3xl mx-auto px-6 py-8">
-          <p className="text-red-400 text-sm mb-4">
-            {error ?? "Unable to fetch profile. Try again later."}
-          </p>
-          <button
-            onClick={handleBack}
-            className="py-2 px-4 bg-gray-700 rounded-lg text-white text-sm hover:bg-gray-600 transition-colors"
-          >
-            Try again
-          </button>
-        </div>
-      </main>
+      </motion.main>
     );
   }
 
   if (state === "upgrade") {
     return (
-      <main className="min-h-screen bg-[#0a0a0f]">
-        <div className="max-w-2xl mx-auto px-6 py-8">
-          <div className="mb-6">
-            <h1 className="text-xl font-semibold text-white">Analyze</h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              You&apos;ve reached your monthly limit.
-            </p>
-          </div>
+      <motion.main className="min-h-screen bg-[#0d0d0d]" {...fadeUp}>
+        <div className="max-w-2xl mx-auto px-6 py-12">
+          <h1 className="text-xl font-bold mb-2">Monthly limit reached</h1>
+          <p className="text-sm text-[#8a8580] mb-8">
+            Upgrade to Pro for unlimited analyses and multi-agent AI reports.
+          </p>
           <UpgradePrompt />
           <button
-            onClick={() => { setState("platform"); setError(null); }}
-            className="mt-4 text-sm text-muted-foreground hover:text-[#ededed] transition-colors"
+            onClick={() => {
+              setState("platform");
+              setError(null);
+            }}
+            className="mt-6 text-sm text-[#8a8580] hover:text-[#e8e4df] transition-colors flex items-center gap-1.5"
           >
-            ← Back to platforms
+            <ArrowLeft size={14} />
+            Back to platforms
           </button>
+        </div>
+      </motion.main>
+    );
+  }
+
+  if (state === "error") {
+    return (
+      <motion.main className="min-h-screen bg-[#0d0d0d]" {...fadeUp}>
+        <div className="max-w-3xl mx-auto px-6 py-12 text-center">
+          <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-red-500/10 mb-4">
+            <RotateCcw size={20} className="text-red-400" />
+          </div>
+          <p className="text-[#e8e4df] text-sm mb-6">
+            {error ?? "Unable to fetch profile. Try again later."}
+          </p>
+          <button
+            onClick={handleBack}
+            className="px-5 py-2.5 rounded-lg text-sm font-medium bg-white/[0.06] hover:bg-white/[0.1] text-[#e8e4df] border border-white/[0.08] transition-all duration-200"
+          >
+            Try again
+          </button>
+        </div>
+      </motion.main>
+    );
+  }
+
+  // Platform selection state
+  if (state === "platform") {
+    const savedForPlatforms = savedProfiles.reduce(
+      (acc, p) => {
+        if (!acc[p.platform]) acc[p.platform] = [];
+        acc[p.platform].push(p);
+        return acc;
+      },
+      {} as Record<string, SavedProfile[]>
+    );
+
+    return (
+      <main className="min-h-screen bg-[#0d0d0d]">
+        <div className="max-w-4xl mx-auto px-6 py-10">
+          <motion.div {...fadeUp}>
+            <h1 className="text-2xl font-bold tracking-tight">Analyze</h1>
+            <p className="text-sm text-[#8a8580] mt-1.5">
+              Choose a platform or select a saved profile to analyze.
+            </p>
+          </motion.div>
+
+          {/* Saved Profiles */}
+          {savedProfiles.length > 0 && (
+            <motion.div
+              className="mt-8"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.15 }}
+            >
+              <h2 className="text-xs font-semibold tracking-[0.15em] uppercase text-[#8a8580] mb-3 flex items-center gap-2">
+                <BookmarkCheck size={13} />
+                Saved profiles
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                {savedProfiles.slice(0, 6).map((profile, i) => {
+                  const platformInfo = PLATFORMS.find(
+                    (p) => p.id === profile.platform
+                  );
+                  const Icon = platformInfo?.icon ?? Instagram;
+                  return (
+                    <motion.button
+                      key={profile.id}
+                      onClick={() => handleSavedProfileSelect(profile)}
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#141414] border border-white/[0.06] hover:border-rose-500/20 hover:bg-[#1a1a1a] transition-all duration-200 text-left group"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.05 * i }}
+                    >
+                      <div
+                        className="h-8 w-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                        style={{
+                          backgroundColor: `${platformInfo?.color}15`,
+                        }}
+                      >
+                        <Icon
+                          size={15}
+                          style={{ color: platformInfo?.color }}
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-[#e8e4df] truncate">
+                          {profile.display_name || profile.username}
+                        </p>
+                        <p className="text-[11px] text-[#8a8580]">
+                          {platformInfo?.label}
+                        </p>
+                      </div>
+                      <Sparkles
+                        size={13}
+                        className="ml-auto text-[#8a8580] opacity-0 group-hover:opacity-100 transition-opacity"
+                      />
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Platform Grid */}
+          <motion.div className="mt-10" variants={stagger} initial="initial" animate="animate">
+            <h2 className="text-xs font-semibold tracking-[0.15em] uppercase text-[#8a8580] mb-3">
+              New analysis
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+              {PLATFORMS.map((p) => {
+                const count = savedForPlatforms[p.id]?.length ?? 0;
+                return (
+                  <motion.button
+                    key={p.id}
+                    onClick={() => handlePlatformSelect(p.id)}
+                    className="flex flex-col items-center gap-3 px-4 py-5 rounded-xl bg-[#141414] border border-white/[0.06] hover:border-rose-500/20 hover:bg-[#1a1a1a] transition-all duration-200 group"
+                    variants={fadeUp}
+                  >
+                    <div
+                      className="h-10 w-10 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                      style={{ backgroundColor: `${p.color}12` }}
+                    >
+                      <p.icon size={20} style={{ color: p.color }} />
+                    </div>
+                    <div className="text-center">
+                      <p className="text-[13px] font-medium text-[#e8e4df]">
+                        {p.label}
+                      </p>
+                      {count > 0 && (
+                        <p className="text-[10px] text-[#8a8580] mt-0.5">
+                          {count} saved
+                        </p>
+                      )}
+                    </div>
+                  </motion.button>
+                );
+              })}
+            </div>
+          </motion.div>
         </div>
       </main>
     );
   }
 
-  // input state
-  const platformName = PLATFORM_NAMES[platform] ?? platform;
+  // Input state
+  const platformInfo = PLATFORMS.find((p) => p.id === platform);
+  const Icon = platformInfo?.icon ?? Instagram;
   const inputPlaceholder =
     platform === "linkedin" || platform === "facebook"
       ? "Profile URL or username"
-      : `${platformName} username`;
+      : `${platformInfo?.label} username`;
 
   return (
-    <main className="min-h-screen bg-[#0a0a0f]">
-      <div className="max-w-3xl mx-auto px-6 py-8">
-        <button
-          onClick={() => setState("platform")}
-          className="text-sm text-gray-400 hover:text-gray-200 mb-4 flex items-center gap-1"
-        >
-          ← Back
-        </button>
-        <h1 className="text-xl font-semibold text-white">
-          Analyze a {platformName} profile
-        </h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Enter a {platformName} username to get AI-powered insights.
-        </p>
-        <form onSubmit={handleAnalyze} className="mt-6 flex flex-col gap-4">
-          <div>
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium text-gray-300 mb-1"
-            >
-              Username
-            </label>
-            <input
-              id="username"
-              type="text"
-              placeholder={inputPlaceholder}
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              className="w-full px-4 py-2.5 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors"
-            />
-          </div>
-          {error && (
-            <p className="text-sm text-red-400">{error}</p>
-          )}
+    <AnimatePresence mode="wait">
+      <motion.main key="input" className="min-h-screen bg-[#0d0d0d]" {...fadeUp}>
+        <div className="max-w-lg mx-auto px-6 py-12">
+          {/* Back button */}
           <button
-            type="submit"
-            className="w-full py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg text-white font-semibold hover:from-purple-500 hover:to-pink-500 transition-all"
+            onClick={() => setState("platform")}
+            className="text-sm text-[#8a8580] hover:text-[#e8e4df] mb-8 flex items-center gap-1.5 transition-colors"
           >
-            Analyze profile
+            <ArrowLeft size={14} />
+            All platforms
           </button>
-        </form>
-      </div>
-    </main>
+
+          {/* Platform header */}
+          <div className="flex items-center gap-3 mb-8">
+            <div
+              className="h-11 w-11 rounded-xl flex items-center justify-center"
+              style={{ backgroundColor: `${platformInfo?.color}15` }}
+            >
+              <Icon size={22} style={{ color: platformInfo?.color }} />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold tracking-tight">
+                {platformInfo?.label} analysis
+              </h1>
+              <p className="text-sm text-[#8a8580]">
+                Enter a profile to get AI-powered insights
+              </p>
+            </div>
+          </div>
+
+          {/* Input form */}
+          <form onSubmit={handleAnalyze} className="space-y-4">
+            <div className="relative">
+              <Search
+                size={16}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5a5550]"
+              />
+              <input
+                type="text"
+                placeholder={inputPlaceholder}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                autoFocus
+                className="w-full pl-10 pr-12 py-3 rounded-xl border border-white/[0.1] bg-[#141414] text-sm text-[#e8e4df] placeholder:text-[#5a5550] focus:outline-none focus:ring-2 focus:ring-rose-500/30 focus:border-rose-500/30 transition-all duration-200"
+              />
+              {username.trim() && (
+                <button
+                  type="button"
+                  onClick={handleSaveProfile}
+                  disabled={saving || isProfileSaved}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8a8580] hover:text-rose-400 transition-colors disabled:opacity-50"
+                  title={isProfileSaved ? "Profile saved" : "Save profile"}
+                >
+                  {isProfileSaved ? (
+                    <BookmarkCheck size={16} className="text-rose-400" />
+                  ) : (
+                    <Bookmark size={16} />
+                  )}
+                </button>
+              )}
+            </div>
+
+            {error && (
+              <motion.div
+                className="px-3 py-2.5 rounded-lg bg-red-500/10 border border-red-500/20"
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <p className="text-sm text-red-400">{error}</p>
+              </motion.div>
+            )}
+
+            <button
+              type="submit"
+              className="w-full py-3 rounded-xl text-sm font-semibold bg-rose-600 hover:bg-rose-500 text-white transition-all duration-200 hover:shadow-xl hover:shadow-rose-600/20 flex items-center justify-center gap-2"
+            >
+              <Sparkles size={15} />
+              Analyze profile
+            </button>
+          </form>
+
+          {/* Saved profiles for this platform */}
+          {savedProfiles.filter((p) => p.platform === platform).length > 0 && (
+            <motion.div
+              className="mt-8 pt-6 border-t border-white/[0.06]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              <h3 className="text-xs font-semibold tracking-[0.15em] uppercase text-[#8a8580] mb-3">
+                Saved {platformInfo?.label} profiles
+              </h3>
+              <div className="space-y-1.5">
+                {savedProfiles
+                  .filter((p) => p.platform === platform)
+                  .map((profile) => (
+                    <button
+                      key={profile.id}
+                      onClick={() => {
+                        setUsername(profile.username);
+                      }}
+                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-left group"
+                    >
+                      <span className="text-sm text-[#e8e4df]">
+                        {profile.username}
+                      </span>
+                      <span className="text-[11px] text-[#5a5550] ml-auto">
+                        {new Date(profile.last_analyzed_at).toLocaleDateString()}
+                      </span>
+                    </button>
+                  ))}
+              </div>
+            </motion.div>
+          )}
+        </div>
+      </motion.main>
+    </AnimatePresence>
   );
 }
