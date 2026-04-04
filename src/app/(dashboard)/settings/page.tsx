@@ -8,7 +8,7 @@ import { PasswordUpdateSection } from "@/components/settings/PasswordUpdateSecti
 import { razorpay } from "@/lib/razorpay/client";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Settings — InstaAnalyse" };
+export const metadata: Metadata = { title: "Settings — SocialLens" };
 
 interface RazorpayInvoice {
   id: string;

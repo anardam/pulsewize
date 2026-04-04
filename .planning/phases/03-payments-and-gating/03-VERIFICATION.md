@@ -141,7 +141,7 @@ No blockers found. No TODO/FIXME/placeholder comments in phase-3 files. No hardc
 #### 1. Razorpay Subscription Checkout (End-to-End)
 
 **Test:** Open the analyze page as a free-tier user. Submit a profile analysis. When the UpgradePrompt appears, click "Upgrade to Pro". Complete payment with a Razorpay test card (e.g., `4111 1111 1111 1111`).
-**Expected:** Razorpay popup opens with "InstaAnalyse — Pro Plan" description, payment completes, webhook fires to `/api/webhooks/razorpay`, Supabase `subscriptions` row gains `plan=pro, status=active`. Page reloads and the Settings page shows "Pro" badge.
+**Expected:** Razorpay popup opens with "SocialLens — Pro Plan" description, payment completes, webhook fires to `/api/webhooks/razorpay`, Supabase `subscriptions` row gains `plan=pro, status=active`. Page reloads and the Settings page shows "Pro" badge.
 **Why human:** Requires `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_PLAN_ID`, `RAZORPAY_WEBHOOK_SECRET` in environment, Razorpay sandbox endpoint configured, live browser with `checkout.js` loaded.
 
 #### 2. Free-Tier Usage Wall (UI state)

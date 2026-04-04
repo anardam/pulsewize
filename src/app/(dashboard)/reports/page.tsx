@@ -9,7 +9,7 @@ import { Pagination } from "@/components/reports/Pagination";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Reports — InstaAnalyse" };
+export const metadata: Metadata = { title: "Reports — SocialLens" };
 
 const PAGE_SIZE = 12;
 

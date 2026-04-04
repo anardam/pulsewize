@@ -23,7 +23,7 @@ export function UpgradePrompt() {
       const rzp = new (window as any).Razorpay({
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         subscription_id: data.subscriptionId, // NOT order_id
-        name: "InstaAnalyse",
+        name: "SocialLens",
         description: "Pro Plan — Unlimited Analyses",
         theme: { color: "#7c3aed" },
         handler: function () {

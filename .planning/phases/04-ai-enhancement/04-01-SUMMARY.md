@@ -124,7 +124,7 @@ Valid report_type values: `'analysis'`, `'calendar'`, `'comparison'`, `'hashtags
 
 ## Issues Encountered
 
-- Worktree branch `worktree-agent-ad8a61ec` was at commit c7f4482 (pre-Phase-2) while the main InstaAnalyse repo is at Phase 4. The supabase directory and Phase 2/3 changes were not present. Resolved by creating the schema.sql from the main project's current schema.
+- Worktree branch `worktree-agent-ad8a61ec` was at commit c7f4482 (pre-Phase-2) while the main SocialLens repo is at Phase 4. The supabase directory and Phase 2/3 changes were not present. Resolved by creating the schema.sql from the main project's current schema.
 
 ## User Setup Required
 

@@ -66,7 +66,7 @@ completed: 2026-03-31
 ## Accomplishments
 - Created PlatformCard.tsx: clickable card with colored avatar, platform name, health badge (green/yellow/red/pulse-gray), and selected ring
 - Created PlatformGrid.tsx: 6-card responsive grid (2/3/6 cols at mobile/tablet/desktop), fetches /api/platform-health on mount, defaults to ok on failure
-- Rewrote analyze/page.tsx: added "platform" state as entry point, localStorage persistence via `instaanalyse_last_platform`, platform-scoped handleAnalyze POST, error+retry for non-Instagram scrape failures
+- Rewrote analyze/page.tsx: added "platform" state as entry point, localStorage persistence via `sociallens_last_platform`, platform-scoped handleAnalyze POST, error+retry for non-Instagram scrape failures
 
 ## Task Commits
 

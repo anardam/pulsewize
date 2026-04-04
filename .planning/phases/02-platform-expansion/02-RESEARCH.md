@@ -465,7 +465,7 @@ type AnalyzeState = "platform" | "input" | "loading" | "results" | "error";
 **localStorage persistence (D-02):**
 
 ```typescript
-const LAST_PLATFORM_KEY = "instaanalyse_last_platform";
+const LAST_PLATFORM_KEY = "sociallens_last_platform";
 
 // On mount: read from localStorage
 const [platform, setPlatform] = useState<string>(() => {

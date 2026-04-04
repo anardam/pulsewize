@@ -43,7 +43,7 @@ except Exception as e:
     print(json.dumps({"success": False, "error": str(e)}))
 `;
 
-    const tmpPath = path.join(os.tmpdir(), "instaanalyse_login.py");
+    const tmpPath = path.join(os.tmpdir(), "sociallens_login.py");
     fs.writeFileSync(tmpPath, script, "utf-8");
 
     try {

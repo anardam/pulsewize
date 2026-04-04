@@ -92,7 +92,7 @@ export async function scrapeWithInstaloader(
   username: string
 ): Promise<{ success: boolean; profile?: InstagramProfile; error?: string }> {
   const tmpDir = os.tmpdir();
-  const scriptPath = path.join(tmpDir, "instaanalyse_scraper.py");
+  const scriptPath = path.join(tmpDir, "sociallens_scraper.py");
 
   try {
     // Write the Python script to a temp file

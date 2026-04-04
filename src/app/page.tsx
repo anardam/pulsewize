@@ -116,10 +116,10 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="border-t border-white/[0.08] py-8 px-6">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <span className="text-sm font-semibold gradient-text">InstaAnalyse</span>
+          <span className="text-sm font-semibold gradient-text">SocialLens</span>
           <span className="text-xs text-muted-foreground">Built with Claude AI</span>
           <span className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} InstaAnalyse
+            © {new Date().getFullYear()} SocialLens
           </span>
         </div>
       </footer>

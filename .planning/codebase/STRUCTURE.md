@@ -5,7 +5,7 @@
 ## Directory Layout
 
 ```
-InstaAnalyse/
+SocialLens/
 ├── src/
 │   ├── app/                    # Next.js App Router (pages + API routes)
 │   │   ├── api/                # Server-side API route handlers

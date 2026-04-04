@@ -1,6 +1,6 @@
 # Technology Stack
 
-**Project:** InstaAnalyse — Multi-Platform Social Media Analytics with AI
+**Project:** SocialLens — Multi-Platform Social Media Analytics with AI
 **Researched:** 2026-03-31
 **Confidence:** MEDIUM-HIGH (core stack HIGH, scraping APIs MEDIUM due to ecosystem volatility)
 

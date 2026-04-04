@@ -1,8 +1,8 @@
-# Roadmap: InstaAnalyse
+# Roadmap: SocialLens
 
 ## Overview
 
-InstaAnalyse evolves from a stateless single-page Instagram analyzer into a multi-tenant SaaS with user accounts, six social platforms, AI-powered multi-agent analysis, dual-market payments, and a growth tracking dashboard. The build order is dependency-driven: auth and the database schema are the hard prerequisite for every other feature, platform scrapers must exist behind a registry before new platforms can be added, payments must be live before expensive AI features are unlocked, and the multi-agent AI layer lands last so it enhances a product that already earns revenue.
+SocialLens evolves from a stateless single-page Instagram analyzer into a multi-tenant SaaS with user accounts, six social platforms, AI-powered multi-agent analysis, dual-market payments, and a growth tracking dashboard. The build order is dependency-driven: auth and the database schema are the hard prerequisite for every other feature, platform scrapers must exist behind a registry before new platforms can be added, payments must be live before expensive AI features are unlocked, and the multi-agent AI layer lands last so it enhances a product that already earns revenue.
 
 ## Phases
 

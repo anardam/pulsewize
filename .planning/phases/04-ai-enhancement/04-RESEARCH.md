@@ -108,8 +108,8 @@ export function createOpenRouterClient(): OpenAI {
     baseURL: "https://openrouter.ai/api/v1",
     apiKey,
     defaultHeaders: {
-      "HTTP-Referer": "https://instaanalyse.com",
-      "X-Title": "InstaAnalyse",
+      "HTTP-Referer": "https://sociallens.com",
+      "X-Title": "SocialLens",
     },
   });
 }

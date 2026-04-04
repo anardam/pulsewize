@@ -1,4 +1,4 @@
-# Requirements: InstaAnalyse
+# Requirements: SocialLens
 
 **Defined:** 2026-03-31
 **Core Value:** AI-powered social media analysis that gives creators and businesses actionable growth strategies

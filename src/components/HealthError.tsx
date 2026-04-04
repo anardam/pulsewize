@@ -62,7 +62,7 @@ export default function HealthError({ health }: Props) {
 
           <div className="bg-gray-800/50 rounded-lg p-4">
             <h3 className="text-sm font-semibold text-purple-300 mb-2">
-              Then restart InstaAnalyse
+              Then restart SocialLens
             </h3>
             <code className="block bg-black/50 px-3 py-2 rounded text-sm text-green-400 font-mono">
               npm run dev

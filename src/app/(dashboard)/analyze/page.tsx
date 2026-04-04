@@ -11,7 +11,7 @@ import type { AnalysisReport, ManualProfileInput } from "@/lib/types";
 
 type AnalyzeState = "platform" | "input" | "loading" | "manual" | "results" | "error" | "upgrade";
 
-const LAST_PLATFORM_KEY = "instaanalyse_last_platform";
+const LAST_PLATFORM_KEY = "sociallens_last_platform";
 
 const PLATFORM_NAMES: Record<string, string> = {
   instagram: "Instagram",

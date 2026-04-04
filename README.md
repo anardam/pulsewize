@@ -1,4 +1,4 @@
-# InstaAnalyse
+# SocialLens
 
 AI-powered Instagram profile analyzer built with Next.js 14 and Claude Code CLI.
 
@@ -21,7 +21,7 @@ AI-powered Instagram profile analyzer built with Next.js 14 and Claude Code CLI.
 ```bash
 # Clone the repo
 git clone <repo-url>
-cd InstaAnalyse
+cd SocialLens
 
 # Install dependencies
 npm install

@@ -1,7 +1,7 @@
 <!-- GSD:project-start source:PROJECT.md -->
 ## Project
 
-**InstaAnalyse**
+**SocialLens**
 
 A multi-platform social media analyzer that uses Anthropic Claude AI to generate deep growth strategies, content calendars, hashtag strategies, and competitor comparisons across Instagram, Twitter/X, TikTok, YouTube, LinkedIn, and Facebook. Users sign up, analyze profiles, track growth over time, and subscribe for premium features.
 
@@ -228,7 +228,7 @@ A multi-platform social media analyzer that uses Anthropic Claude AI to generate
 - All UI state lives in `src/app/page.tsx` via `useState` hooks
 - App state is modeled as a finite state machine with `AppState` type: `"checking" | "healthy" | "unhealthy" | "input" | "manual" | "loading" | "report" | "error"`
 - API key stored in `localStorage` under key `anthropic_api_key`
-- Report history stored in `localStorage` under key `instaanalyse_reports` (last 20 reports)
+- Report history stored in `localStorage` under key `sociallens_reports` (last 20 reports)
 - No global state library (Redux, Zustand, etc.) is used
 ## Key Abstractions
 - Purpose: Uniform return type for all four scraping strategies

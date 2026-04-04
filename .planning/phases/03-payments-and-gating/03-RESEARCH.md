@@ -54,7 +54,7 @@
 
 ## Summary
 
-Phase 3 adds Razorpay-only recurring subscription billing to InstaAnalyse. The foundation is already solid: the `subscriptions` and `usage` tables exist in Supabase, `check_and_increment_usage()` enforces the free tier atomically, and the analyze route already returns HTTP 429 with the upgrade message. This phase wires up the payment layer on top of that foundation.
+Phase 3 adds Razorpay-only recurring subscription billing to SocialLens. The foundation is already solid: the `subscriptions` and `usage` tables exist in Supabase, `check_and_increment_usage()` enforces the free tier atomically, and the analyze route already returns HTTP 429 with the upgrade message. This phase wires up the payment layer on top of that foundation.
 
 The integration pattern is: (1) pre-create a Razorpay plan in the dashboard (immutable once created), (2) create a subscription per user via server-side API route, (3) open Razorpay Standard Checkout popup with `subscription_id` (not `order_id`), (4) after payment, ignore the client callback for access elevation and wait for the `subscription.charged` webhook to confirm and set `plan = 'pro'` in Supabase. The webhook handler verifies the `x-razorpay-signature` using HMAC-SHA256 and deduplicates using `x-razorpay-event-id`.
 
@@ -175,7 +175,7 @@ export function UpgradePrompt() {
     const rzp = new (window as any).Razorpay({
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       subscription_id: subscriptionId,   // NOT order_id — subscriptions use subscription_id
-      name: "InstaAnalyse",
+      name: "SocialLens",
       description: "Pro Plan — Unlimited Analyses",
       theme: { color: "#7c3aed" },       // violet-700 matches brand
       handler: function (response: any) {
@@ -506,7 +506,7 @@ const plan = await razorpay.plans.create({
   period: "monthly",
   interval: 1,
   item: {
-    name: "InstaAnalyse Pro",
+    name: "SocialLens Pro",
     amount: 1999,          // $19.99 in cents (USD)
     currency: "USD",       // Requires international payments enabled on account
     description: "Unlimited AI social media analyses",

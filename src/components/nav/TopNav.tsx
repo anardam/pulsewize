@@ -21,7 +21,7 @@ export async function TopNav({ activePath }: TopNavProps) {
       <div className="max-w-5xl w-full mx-auto flex items-center justify-between">
         {/* Logo */}
         <Link href={user ? "/dashboard" : "/"} className="flex-shrink-0">
-          <span className="text-sm font-semibold gradient-text">InstaAnalyse</span>
+          <span className="text-sm font-semibold gradient-text">SocialLens</span>
         </Link>
 
         {/* Authenticated nav links */}

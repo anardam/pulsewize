@@ -14,7 +14,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "InstaAnalyse — AI-powered Instagram analysis",
+  title: "SocialLens — AI-powered Instagram analysis",
   description: "Get actionable growth strategies for any Instagram profile using AI.",
 };
 

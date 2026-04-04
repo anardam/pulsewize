@@ -18,7 +18,7 @@ const GrowthChart = dynamic(
   { ssr: false }
 );
 
-export const metadata: Metadata = { title: "Dashboard \u2014 InstaAnalyse" };
+export const metadata: Metadata = { title: "Dashboard \u2014 SocialLens" };
 
 export default async function DashboardPage() {
   const supabase = await createSupabaseServer();

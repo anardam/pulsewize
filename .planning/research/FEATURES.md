@@ -31,7 +31,7 @@ Sprout Social, or even free tools.
 ## Differentiators
 
 Features that create competitive distance. Users don't expect these, but once they see them,
-they don't want to go back. These are the reasons InstaAnalyse can charge more than Buffer
+they don't want to go back. These are the reasons SocialLens can charge more than Buffer
 ($5/month) and compete with Iconosquare ($59/month+).
 
 | Feature | Value Proposition | Complexity | Notes |
@@ -53,7 +53,7 @@ or will delay the core value proposition.
 
 | Anti-Feature | Why Avoid | What to Do Instead |
 |--------------|-----------|-------------------|
-| Social media posting / scheduling | Hootsuite, Buffer, Later have spent years building this. It is not where InstaAnalyse wins. Building it would require deep platform OAuth scopes, content moderation risk, and doubles the complexity | Remain analysis-only. Users who want scheduling will keep their Buffer subscription; they add InstaAnalyse on top for deep analytics. |
+| Social media posting / scheduling | Hootsuite, Buffer, Later have spent years building this. It is not where SocialLens wins. Building it would require deep platform OAuth scopes, content moderation risk, and doubles the complexity | Remain analysis-only. Users who want scheduling will keep their Buffer subscription; they add SocialLens on top for deep analytics. |
 | Real-time monitoring / alerts | Requires persistent processes and WebSockets — incompatible with Vercel serverless. Also not the core use case (batch analysis, not live tracking). Already explicitly out of scope. | Deliver scheduled or on-demand analysis with email delivery of results instead (lower infra complexity). |
 | Team / agency multi-seat collaboration | Approval workflows, multi-user accounts, white-label reports — all of this is out of scope for v1. Sprout Social charges $249+/user/month for team features. It is a different product segment. | Focus on single-user, then revisit after traction. The freemium funnel for individual creators is a different motion than agency sales. |
 | Proprietary platform APIs requiring app review | Instagram Graph API, LinkedIn API, TikTok for Developers — all require app review (weeks to months), business verification, and ongoing compliance. Gating the product behind API approval is a launch blocker. | Use multi-strategy scraping cascade (already established pattern) as primary. Add official API as an enhancement after launch, not a prerequisite. |
@@ -157,7 +157,7 @@ Based on research into SaaS freemium conversion patterns (2-5% typical, 6-10% fo
 Key gate placement: the upgrade moment should trigger when the free user either (a) hits the 3-analysis limit, or (b) tries to run a competitor comparison or view growth trends — whichever comes first. Research shows users who engage with core features within the first week are 5x more likely to convert.
 
 Do NOT gate the quality of the AI report behind tiers. Free users should experience the
-best analysis InstaAnalyse can produce. Gate on quantity and advanced features, not quality.
+best analysis SocialLens can produce. Gate on quantity and advanced features, not quality.
 
 ---
 

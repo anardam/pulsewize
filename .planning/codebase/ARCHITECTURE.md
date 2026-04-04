@@ -91,7 +91,7 @@
 - All UI state lives in `src/app/page.tsx` via `useState` hooks
 - App state is modeled as a finite state machine with `AppState` type: `"checking" | "healthy" | "unhealthy" | "input" | "manual" | "loading" | "report" | "error"`
 - API key stored in `localStorage` under key `anthropic_api_key`
-- Report history stored in `localStorage` under key `instaanalyse_reports` (last 20 reports)
+- Report history stored in `localStorage` under key `sociallens_reports` (last 20 reports)
 - No global state library (Redux, Zustand, etc.) is used
 
 ## Key Abstractions

@@ -1,6 +1,6 @@
 import { AnalysisReport } from "./types";
 
-const STORAGE_KEY = "instaanalyse_reports";
+const STORAGE_KEY = "sociallens_reports";
 
 export interface StoredReport {
   username: string;

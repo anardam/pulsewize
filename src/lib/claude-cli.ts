@@ -61,7 +61,7 @@ export async function analyzeProfile(
   const prompt = buildAnalysisPrompt(profileData, nlpResult, trendResult);
 
   // Write prompt to a temp file to avoid CLI argument length limits
-  const tmpFile = path.join(os.tmpdir(), `instaanalyse-prompt-${Date.now()}.txt`);
+  const tmpFile = path.join(os.tmpdir(), `sociallens-prompt-${Date.now()}.txt`);
   fs.writeFileSync(tmpFile, prompt, "utf-8");
 
   try {

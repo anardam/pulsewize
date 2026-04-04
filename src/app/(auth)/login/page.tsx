@@ -2,7 +2,7 @@
 import { AuthForm } from "@/components/auth/AuthForm";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Log in — InstaAnalyse" };
+export const metadata: Metadata = { title: "Log in — SocialLens" };
 
 export default function LoginPage() {
   return (

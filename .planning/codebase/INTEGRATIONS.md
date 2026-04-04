@@ -70,7 +70,7 @@
 
 **Client-Side Storage:**
 - `localStorage` for report history (`src/lib/report-history.ts`)
-  - Key: `instaanalyse_reports`
+  - Key: `sociallens_reports`
   - Stores last 20 analysis summaries (extracted scores, not full reports)
   - Used for before/after comparison when re-analyzing a profile
 - `localStorage` for Anthropic API key (`src/components/ApiKeyModal.tsx`)

@@ -1,6 +1,6 @@
 # Project Research Summary
 
-**Project:** InstaAnalyse — Multi-Platform Social Media Analytics with AI
+**Project:** SocialLens — Multi-Platform Social Media Analytics with AI
 **Domain:** AI-powered social media analytics SaaS (freemium, Vercel-deployed)
 **Researched:** 2026-03-31
 **Confidence:** MEDIUM-HIGH
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-InstaAnalyse is expanding from a single-platform Instagram analyzer into a 6-platform SaaS product with multi-agent AI analysis, user authentication, report persistence, and dual-market payments (Stripe for global, Razorpay for India). The research confirms that the existing Next.js 14 + Anthropic Claude + Vercel stack is the correct foundation — no major stack changes are needed, but significant infrastructure must be added around it: Supabase Auth + PostgreSQL, a platform-agnostic scraper registry, atomic usage gating, and a multi-agent AI orchestrator. The critical insight is that auth and the database schema are a hard prerequisite for every other feature: growth tracking, report history, usage limits, competitor comparison, and payments all depend on user identity and persistent state.
+SocialLens is expanding from a single-platform Instagram analyzer into a 6-platform SaaS product with multi-agent AI analysis, user authentication, report persistence, and dual-market payments (Stripe for global, Razorpay for India). The research confirms that the existing Next.js 14 + Anthropic Claude + Vercel stack is the correct foundation — no major stack changes are needed, but significant infrastructure must be added around it: Supabase Auth + PostgreSQL, a platform-agnostic scraper registry, atomic usage gating, and a multi-agent AI orchestrator. The critical insight is that auth and the database schema are a hard prerequisite for every other feature: growth tracking, report history, usage limits, competitor comparison, and payments all depend on user identity and persistent state.
 
 The highest-risk areas are (1) function timeout on Vercel when combining multi-platform scraping with multi-agent AI calls — this requires a job-queue pattern before multi-platform launches, not after; (2) freemium limit enforcement — the current in-memory rate limiter provides zero production protection and must be replaced with an atomic PostgreSQL increment before any usage gating is shown to users; and (3) AI cost management — naive multi-agent debate can cost $0.50–$2.00 per analysis, which is unsustainable on a free tier without Haiku workers, token caps, and result caching. LinkedIn and Facebook scraping will be unreliable regardless of investment — plan for frequent manual-entry fallbacks on those platforms and do not over-engineer automation for them.
 

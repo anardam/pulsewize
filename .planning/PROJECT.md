@@ -1,4 +1,4 @@
-# InstaAnalyse
+# SocialLens
 
 ## What This Is
 

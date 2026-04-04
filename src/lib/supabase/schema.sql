@@ -1,4 +1,4 @@
--- InstaAnalyse Database Schema
+-- SocialLens Database Schema
 -- Phase 1: Foundation
 -- Apply via: Supabase Dashboard > SQL Editor > New query > paste > Run
 -- Source: D-11, D-12, D-13 from CONTEXT.md; patterns from RESEARCH.md

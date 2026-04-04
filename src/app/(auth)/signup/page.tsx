@@ -2,7 +2,7 @@
 import { AuthForm } from "@/components/auth/AuthForm";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Get started — InstaAnalyse" };
+export const metadata: Metadata = { title: "Get started — SocialLens" };
 
 export default function SignupPage() {
   return (

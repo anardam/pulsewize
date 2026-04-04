@@ -451,7 +451,7 @@ Casual and friendly. Use contractions ("you're", "we'll"). Avoid corporate jargo
 **Sticky:** `sticky top-0 z-50`
 
 **Unauthenticated state (Landing, Login, Signup pages):**
-- Left: Logo — `gradient-text` on "InstaAnalyse", `<Text size="sm" weight="semibold">`
+- Left: Logo — `gradient-text` on "SocialLens", `<Text size="sm" weight="semibold">`
 - Right: "Log in" `<Button variant="ghost" size="sm">` + "Get started" `<Button variant="gradient" size="sm">`
 - Configure via `TopNav` `logo`, `actions` props
 
