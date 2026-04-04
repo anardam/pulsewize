@@ -4,21 +4,21 @@ import {
   Sparkles,
   TrendingUp,
   BarChart3,
-  Instagram,
-  Youtube,
-  Twitter,
-  Linkedin,
-  Facebook,
+  Camera,
+  Play,
+  AtSign,
+  Briefcase,
+  Users,
   ArrowRight,
   Check,
 } from "lucide-react";
 
 const PLATFORMS = [
-  { icon: Instagram, label: "Instagram" },
-  { icon: Youtube, label: "YouTube" },
-  { icon: Twitter, label: "Twitter/X" },
-  { icon: Linkedin, label: "LinkedIn" },
-  { icon: Facebook, label: "Facebook" },
+  { icon: Camera, label: "Instagram" },
+  { icon: Play, label: "YouTube" },
+  { icon: AtSign, label: "Twitter/X" },
+  { icon: Briefcase, label: "LinkedIn" },
+  { icon: Users, label: "Facebook" },
 ];
 
 const FEATURES = [

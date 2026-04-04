@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Instagram,
-  Youtube,
-  Twitter,
-  Linkedin,
-  Facebook,
+  Camera,
+  Play,
+  AtSign,
+  Briefcase,
+  Users,
   Music2,
   ArrowLeft,
   Search,
@@ -43,12 +43,12 @@ interface SavedProfile {
 }
 
 const PLATFORMS = [
-  { id: "instagram", label: "Instagram", icon: Instagram, color: "#E1306C" },
-  { id: "youtube", label: "YouTube", icon: Youtube, color: "#FF0000" },
-  { id: "twitter", label: "Twitter/X", icon: Twitter, color: "#1DA1F2" },
+  { id: "instagram", label: "Instagram", icon: Camera, color: "#E1306C" },
+  { id: "youtube", label: "YouTube", icon: Play, color: "#FF0000" },
+  { id: "twitter", label: "Twitter/X", icon: AtSign, color: "#1DA1F2" },
   { id: "tiktok", label: "TikTok", icon: Music2, color: "#00f2ea" },
-  { id: "linkedin", label: "LinkedIn", icon: Linkedin, color: "#0A66C2" },
-  { id: "facebook", label: "Facebook", icon: Facebook, color: "#1877F2" },
+  { id: "linkedin", label: "LinkedIn", icon: Briefcase, color: "#0A66C2" },
+  { id: "facebook", label: "Facebook", icon: Users, color: "#1877F2" },
 ];
 
 const fadeUp = {

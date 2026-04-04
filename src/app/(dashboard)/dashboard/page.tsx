@@ -2,21 +2,13 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Search } from "lucide-react";
-import dynamic from "next/dynamic";
 import { TopNav } from "@/components/nav/TopNav";
 import { StatsCards } from "@/components/dashboard/StatsCards";
 import { ActivityFeed } from "@/components/dashboard/ActivityFeed";
+import { GrowthChartWrapper } from "@/components/dashboard/GrowthChartWrapper";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { buildChartData } from "@/lib/chart-data";
 import type { Metadata } from "next";
-
-const GrowthChart = dynamic(
-  () =>
-    import("@/components/dashboard/GrowthChart").then((m) => ({
-      default: m.GrowthChart,
-    })),
-  { ssr: false }
-);
 
 export const metadata: Metadata = { title: "Dashboard \u2014 SocialLens" };
 
@@ -162,7 +154,7 @@ export default async function DashboardPage() {
               <h2 className="text-base font-semibold mb-4">
                 Growth trend &mdash; @{topHandle}
               </h2>
-              <GrowthChart
+              <GrowthChartWrapper
                 data={chartPoints}
                 title={`@${topHandle} — engagement, score & reach`}
               />
