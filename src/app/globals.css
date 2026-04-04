@@ -1,45 +1,62 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  color-scheme: dark;
-  --background: 0 0% 5%;
-  --foreground: 30 10% 90%;
-}
+/* Tailwind v4 — source paths */
+@source "../**/*.{ts,tsx}";
+@source "../../node_modules/@tesserix/web/dist/**/*.{js,jsx}";
 
-.dark {
-  --background: 0 0% 5%;             /* #0d0d0d — true black charcoal */
-  --foreground: 30 10% 90%;          /* #e8e4df — warm off-white */
-  --card: 0 0% 8%;                   /* #141414 — elevated surface */
-  --card-foreground: 30 10% 90%;
-  --popover: 0 0% 8%;
-  --popover-foreground: 30 10% 90%;
-  --primary: 347 77% 64%;            /* #e1467c — rose */
-  --primary-foreground: 0 0% 100%;
-  --secondary: 0 0% 10%;             /* #1a1a1a */
-  --secondary-foreground: 30 10% 90%;
-  --muted: 0 0% 12%;
-  --muted-foreground: 30 5% 50%;     /* warm gray */
-  --accent: 347 77% 64%;
-  --accent-foreground: 0 0% 100%;
-  --destructive: 0 72% 55%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 0 0% 14%;
-  --input: 0 0% 10%;
-  --ring: 347 77% 64%;
+/* Custom theme */
+@theme {
+  --color-background: #0d0d0d;
+  --color-foreground: #e8e4df;
+  --color-card: #141414;
+  --color-card-foreground: #e8e4df;
+  --color-muted: #1a1a1a;
+  --color-muted-foreground: #8a8580;
+  --color-primary: #e1467c;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #1a1a1a;
+  --color-secondary-foreground: #e8e4df;
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #242424;
+  --color-input: #1a1a1a;
+  --color-ring: #e1467c;
   --radius: 0.625rem;
+
+  --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --animate-pulse-slow: pulse 3s ease-in-out infinite;
+  --animate-spin: spin 1s linear infinite;
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
+  --animate-progress: progress-fill 2s ease-in-out;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes progress-fill {
+    from { width: 0%; }
+    to { width: 100%; }
+  }
 }
 
-/* Base typography */
+/* Base styles */
 body {
-  color: hsl(var(--foreground));
-  background: hsl(var(--background));
+  color: var(--color-foreground);
+  background: var(--color-background);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Subtle film grain overlay */
+/* Film grain overlay */
 body::before {
   content: "";
   position: fixed;
@@ -50,7 +67,7 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
 }
 
-/* Custom scrollbar — minimal */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -58,11 +75,11 @@ body::before {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: hsl(347 77% 64% / 0.3);
+  background: color-mix(in srgb, #e1467c 30%, transparent);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(347 77% 64% / 0.5);
+  background: color-mix(in srgb, #e1467c 50%, transparent);
 }
 
 /* Rose gradient text */
@@ -73,7 +90,7 @@ body::before {
   background-clip: text;
 }
 
-/* Card hover glow — warm rose */
+/* Card glow */
 .card-glow {
   position: relative;
   transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
@@ -86,7 +103,7 @@ body::before {
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  background: linear-gradient(135deg, hsl(347 77% 64% / 0.15), hsl(30 60% 60% / 0.08));
+  background: linear-gradient(135deg, rgba(225, 70, 124, 0.15), rgba(212, 165, 116, 0.08));
   opacity: 0;
   z-index: -1;
   transition: opacity 0.4s cubic-bezier(0.23, 1, 0.32, 1);
@@ -95,44 +112,8 @@ body::before {
   opacity: 1;
 }
 
-/* Stagger animation for page loads */
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-up {
-  animation: fade-up 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
-}
-
-/* Progress bar animation */
-@keyframes progress-fill {
-  from { width: 0%; }
-  to { width: 100%; }
-}
-.animate-progress {
-  animation: progress-fill 2s ease-in-out;
-}
-
-/* Subtle horizontal rule with rose center */
+/* Divider */
 .divider-rose {
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    hsl(347 77% 64% / 0.2) 50%,
-    transparent 100%
-  );
-}
-
-/* Focus ring — rose */
-.focus-ring:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(347 77% 64% / 0.5);
+  background: linear-gradient(90deg, transparent 0%, rgba(225, 70, 124, 0.2) 50%, transparent 100%);
 }
