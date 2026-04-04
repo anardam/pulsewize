@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createSupabaseBrowser } from "@/lib/supabase/client";
-import { TopNav } from "@/components/nav/TopNav";
 import ReportDashboard from "@/components/ReportDashboard";
 import type { AnalysisReport } from "@/lib/types";
 
