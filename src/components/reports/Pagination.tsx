@@ -23,7 +23,7 @@ export function Pagination({ page, totalPages }: PaginationProps) {
   );
 
   const buttonClass =
-    "px-3 py-1.5 rounded-lg text-sm border border-white/[0.08] bg-[#111118] disabled:opacity-40 hover:border-violet-500/30 transition-colors disabled:cursor-not-allowed";
+    "px-3 py-1.5 rounded-lg text-sm border border-white/[0.06] bg-[#141414] disabled:opacity-40 hover:border-rose-500/20 transition-colors disabled:cursor-not-allowed";
 
   return (
     <div className="flex items-center justify-center gap-3">
@@ -36,7 +36,7 @@ export function Pagination({ page, totalPages }: PaginationProps) {
         Previous
       </button>
 
-      <span className="text-sm text-muted-foreground">
+      <span className="text-sm text-[#8a8580]">
         Page {page} of {totalPages}
       </span>
 

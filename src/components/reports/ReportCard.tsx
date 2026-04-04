@@ -18,7 +18,7 @@ interface ReportCardProps {
 function ScoreBadge({ score }: { score: number }) {
   if (score === 0) {
     return (
-      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border text-muted-foreground bg-white/5 border-white/[0.08]">
+      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border text-[#8a8580] bg-white/5 border-white/[0.06]">
         —
       </span>
     );
@@ -61,15 +61,15 @@ export function ReportCard({ report }: ReportCardProps) {
   return (
     <Link
       href={`/reports/${report.id}`}
-      className="block bg-[#111118] border border-white/[0.08] rounded-xl p-5 hover:border-violet-500/30 transition-colors"
+      className="block bg-[#141414] border border-white/[0.06] rounded-xl p-5 hover:border-rose-500/20 transition-colors"
     >
       {/* Top row: platform badge + report type */}
       <div className="flex items-center gap-2">
-        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-violet-500/10 text-violet-400 border border-violet-500/20 capitalize">
+        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20 capitalize">
           {report.platform}
         </span>
         {report.report_type && report.report_type !== "analysis" && (
-          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-white/5 text-muted-foreground border border-white/[0.08] capitalize">
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-white/5 text-[#8a8580] border border-white/[0.06] capitalize">
             {report.report_type}
           </span>
         )}
@@ -80,7 +80,7 @@ export function ReportCard({ report }: ReportCardProps) {
 
       {/* Bottom: date + score badge */}
       <div className="flex items-center justify-between mt-3">
-        <span className="text-xs text-muted-foreground">{formattedDate}</span>
+        <span className="text-xs text-[#8a8580]">{formattedDate}</span>
         <ScoreBadge score={score} />
       </div>
     </Link>

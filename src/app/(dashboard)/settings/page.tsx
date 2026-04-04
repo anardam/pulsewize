@@ -83,13 +83,13 @@ export default async function SettingsPage() {
   return (
     <>
       <TopNav activePath="/settings" />
-      <main className="min-h-screen bg-[#0a0a0f]">
+      <main className="min-h-screen bg-[#0d0d0d]">
         <div className="max-w-2xl mx-auto px-6 py-8">
           <h1 className="text-xl font-semibold">Settings</h1>
 
           {/* Tab navigation */}
-          <div className="mt-6 border-b border-white/[0.08]">
-            <button className="px-4 py-2 text-sm font-medium border-b-2 border-violet-500 text-[#ededed]">
+          <div className="mt-6 border-b border-white/[0.06]">
+            <button className="px-4 py-2 text-sm font-medium border-b-2 border-rose-500 text-[#e8e4df]">
               Account
             </button>
           </div>
@@ -102,7 +102,7 @@ export default async function SettingsPage() {
           />
 
           {/* Account info card */}
-          <div className="mt-6 bg-[#111118] border border-white/[0.08] rounded-xl p-6">
+          <div className="mt-6 bg-[#141414] border border-white/[0.06] rounded-xl p-6">
             <h2 className="text-base font-semibold">Account</h2>
             <div className="mt-4 space-y-4">
               <div>
@@ -111,7 +111,7 @@ export default async function SettingsPage() {
                   type="email"
                   value={user?.email ?? ""}
                   readOnly
-                  className="w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#0a0a0f] text-sm text-muted-foreground cursor-default"
+                  className="w-full px-3 py-2 rounded-lg border border-white/[0.06] bg-[#0d0d0d] text-sm text-[#8a8580] cursor-default"
                 />
               </div>
               <div>
@@ -119,8 +119,8 @@ export default async function SettingsPage() {
                 <span
                   className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${
                     plan === "pro"
-                      ? "border-violet-500/30 bg-violet-500/10 text-violet-300"
-                      : "border-white/[0.12] text-[#ededed]"
+                      ? "border-rose-500/20 bg-rose-500/10 text-rose-300"
+                      : "border-white/[0.12] text-[#e8e4df]"
                   }`}
                 >
                   {plan === "pro" ? "Pro" : "Free"}
@@ -143,7 +143,7 @@ export default async function SettingsPage() {
           />
 
           {/* Danger zone card */}
-          <div className="mt-4 bg-[#111118] border border-white/[0.08] rounded-xl p-6">
+          <div className="mt-4 bg-[#141414] border border-white/[0.06] rounded-xl p-6">
             <h2 className="text-base font-semibold text-red-400">Danger zone</h2>
             <div className="mt-4">
               <DeleteAccountButton />

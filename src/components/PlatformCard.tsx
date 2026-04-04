@@ -17,11 +17,11 @@ export default function PlatformCard({ name, color, status, isSelected, onClick 
       ? "w-2.5 h-2.5 rounded-full bg-yellow-500"
       : status === "down"
       ? "w-2.5 h-2.5 rounded-full bg-red-500"
-      : "w-2.5 h-2.5 rounded-full bg-gray-600 animate-pulse";
+      : "w-2.5 h-2.5 rounded-full bg-[#3a3a3a] animate-pulse";
 
   const cardClass = [
-    "relative bg-gray-800/50 border border-gray-700 rounded-xl p-4 cursor-pointer transition-all hover:border-gray-500 flex flex-col items-center",
-    isSelected ? "border-purple-500 ring-1 ring-purple-500 bg-gray-800" : "",
+    "relative bg-[#141414] border border-white/[0.06] rounded-xl p-4 cursor-pointer transition-all hover:border-rose-500/20 flex flex-col items-center",
+    isSelected ? "border-rose-500 ring-1 ring-rose-500 bg-[#1a1a1a]" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -37,7 +37,7 @@ export default function PlatformCard({ name, color, status, isSelected, onClick 
       >
         {name.charAt(0)}
       </div>
-      <span className="text-sm font-medium text-gray-200 mt-2 text-center leading-tight">
+      <span className="text-sm font-medium text-[#e8e4df] mt-2 text-center leading-tight">
         {name}
       </span>
     </button>

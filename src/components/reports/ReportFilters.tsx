@@ -65,7 +65,7 @@ export function ReportFilters({
   }, []);
 
   const controlClass =
-    "bg-[#111118] border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-[#ededed] focus:outline-none focus:border-violet-500/50 transition-colors";
+    "bg-[#141414] border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-[#e8e4df] focus:outline-none focus:ring-2 focus:ring-rose-500/30 focus:border-rose-500/30 transition-colors";
 
   return (
     <div className="flex flex-wrap gap-3 mt-4">
@@ -97,7 +97,7 @@ export function ReportFilters({
 
       {/* Date From */}
       <div className="flex items-center gap-1.5">
-        <label className="text-xs text-muted-foreground" htmlFor="dateFrom">
+        <label className="text-xs text-[#8a8580]" htmlFor="dateFrom">
           From
         </label>
         <input
@@ -112,7 +112,7 @@ export function ReportFilters({
 
       {/* Date To */}
       <div className="flex items-center gap-1.5">
-        <label className="text-xs text-muted-foreground" htmlFor="dateTo">
+        <label className="text-xs text-[#8a8580]" htmlFor="dateTo">
           To
         </label>
         <input

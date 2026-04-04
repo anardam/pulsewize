@@ -22,14 +22,14 @@ const REPORT_TYPE_LABELS: Record<string, string> = {
 export function ActivityFeed({ reports }: ActivityFeedProps) {
   if (reports.length === 0) {
     return (
-      <div className="bg-[#111118] border border-white/[0.08] rounded-xl p-10 flex flex-col items-center text-center">
+      <div className="bg-[#141414] border border-white/[0.06] rounded-xl p-10 flex flex-col items-center text-center">
         <p className="text-sm font-medium">No analyses yet</p>
-        <p className="text-sm text-muted-foreground mt-1">
+        <p className="text-sm text-[#8a8580] mt-1">
           No analyses yet &mdash; run your first to see activity here.
         </p>
         <Link
           href="/analyze"
-          className="mt-4 inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-violet-600 hover:bg-violet-500 text-white transition-colors"
+          className="mt-4 inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-rose-600 hover:bg-rose-500 hover:shadow-lg hover:shadow-rose-600/20 text-white transition-colors"
         >
           Analyze a profile
         </Link>
@@ -38,7 +38,7 @@ export function ActivityFeed({ reports }: ActivityFeedProps) {
   }
 
   return (
-    <div className="bg-[#111118] border border-white/[0.08] rounded-xl divide-y divide-white/[0.06]">
+    <div className="bg-[#141414] border border-white/[0.06] rounded-xl divide-y divide-white/[0.06]">
       {reports.map((report) => {
         const date = new Date(report.analyzed_at).toLocaleDateString("en-US", {
           month: "short",
@@ -57,18 +57,18 @@ export function ActivityFeed({ reports }: ActivityFeedProps) {
             <div className="flex items-center gap-3">
               <div>
                 <p className="text-sm font-medium">@{report.username}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">
+                <p className="text-xs text-[#8a8580] mt-0.5">
                   {platformLabel}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               {typeLabel && (
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border border-white/[0.12] text-muted-foreground">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border border-white/[0.12] text-[#8a8580]">
                   {typeLabel}
                 </span>
               )}
-              <span className="text-xs text-muted-foreground">{date}</span>
+              <span className="text-xs text-[#8a8580]">{date}</span>
             </div>
           </div>
         );

@@ -65,14 +65,14 @@ export default async function ReportsPage({ searchParams }: Props) {
   return (
     <>
       <TopNav activePath="/reports" />
-      <main className="min-h-screen bg-[#0a0a0f]">
+      <main className="min-h-screen bg-[#0d0d0d]">
         <div className="max-w-5xl mx-auto px-6 py-8">
           {/* Page header */}
           <div className="flex items-center justify-between mb-2">
             <h1 className="text-xl font-semibold">Reports</h1>
             <Link
               href="/analyze"
-              className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-violet-600 hover:bg-violet-500 text-white transition-colors"
+              className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-rose-600 hover:bg-rose-500 hover:shadow-lg hover:shadow-rose-600/20 text-white transition-colors"
             >
               New analysis
             </Link>
@@ -101,17 +101,17 @@ export default async function ReportsPage({ searchParams }: Props) {
               )}
             </>
           ) : (
-            <div className="mt-6 bg-[#111118] border border-white/[0.08] rounded-xl p-10 flex flex-col items-center text-center">
-              <FileText size={40} className="text-muted-foreground" />
+            <div className="mt-6 bg-[#141414] border border-white/[0.06] rounded-xl p-10 flex flex-col items-center text-center">
+              <FileText size={40} className="text-[#8a8580]" />
               <p className="text-sm font-medium mt-4">No reports found</p>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-sm text-[#8a8580] mt-1">
                 {hasFilters
                   ? "Try clearing your filters"
                   : "Run your first analysis to see reports here"}
               </p>
               <Link
                 href="/analyze"
-                className="mt-4 inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-violet-600 hover:bg-violet-500 text-white transition-colors"
+                className="mt-4 inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-rose-600 hover:bg-rose-500 hover:shadow-lg hover:shadow-rose-600/20 text-white transition-colors"
               >
                 Analyze a profile
               </Link>
