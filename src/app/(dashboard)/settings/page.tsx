@@ -1,5 +1,4 @@
 // src/app/(dashboard)/settings/page.tsx
-import { TopNav } from "@/components/nav/TopNav";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { DeleteAccountButton } from "@/components/settings/DeleteAccountButton";
 import { BillingSection } from "@/components/billing/BillingSection";
@@ -82,17 +81,7 @@ export default async function SettingsPage() {
 
   return (
     <>
-      <TopNav activePath="/settings" />
-      <main className="min-h-screen bg-[#0d0d0d]">
-        <div className="max-w-2xl mx-auto px-6 py-8">
-          <h1 className="text-xl font-semibold">Settings</h1>
-
-          {/* Tab navigation */}
-          <div className="mt-6 border-b border-white/[0.06]">
-            <button className="px-4 py-2 text-sm font-medium border-b-2 border-rose-500 text-[#e8e4df]">
-              Account
-            </button>
-          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-8">Settings</h1>
 
           {/* Profile edit section — display name and avatar */}
           <ProfileEditSection
@@ -149,8 +138,6 @@ export default async function SettingsPage() {
               <DeleteAccountButton />
             </div>
           </div>
-        </div>
-      </main>
     </>
   );
 }

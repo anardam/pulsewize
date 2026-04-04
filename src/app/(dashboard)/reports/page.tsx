@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { FileText } from "lucide-react";
 import { redirect } from "next/navigation";
-import { TopNav } from "@/components/nav/TopNav";
 import { ReportCard } from "@/components/reports/ReportCard";
 import { ReportFilters } from "@/components/reports/ReportFilters";
 import { Pagination } from "@/components/reports/Pagination";
@@ -64,18 +63,12 @@ export default async function ReportsPage({ searchParams }: Props) {
 
   return (
     <>
-      <TopNav activePath="/reports" />
-      <main className="min-h-screen bg-[#0d0d0d]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
             <div>
-              <p className="text-xs font-medium tracking-[0.15em] uppercase text-rose-400/80 mb-1">
-                History
-              </p>
               <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Reports</h1>
               {(count ?? 0) > 0 && (
-                <p className="text-sm text-[#8a8580] mt-1">{count} total reports</p>
+                <p className="text-sm text-[#8a8580] mt-1">{count} saved reports</p>
               )}
             </div>
             <Link
@@ -127,8 +120,6 @@ export default async function ReportsPage({ searchParams }: Props) {
               </Link>
             </div>
           )}
-        </div>
-      </main>
     </>
   );
 }

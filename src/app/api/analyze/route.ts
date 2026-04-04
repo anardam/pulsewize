@@ -36,29 +36,27 @@ export async function POST(request: NextRequest) {
 
   const usageLimit = isPro ? 999999 : 3;
 
-  // 2b. Atomic usage check-and-increment (INFRA-03, D-13)
-  const { data: usageData, error: usageError } = await supabase.rpc(
-    "check_and_increment_usage",
-    { p_user_id: user.id, p_limit: usageLimit }
-  );
+  // 2b. Check usage limit (don't increment yet — only count on success)
+  if (!isPro) {
+    const billingMonth = new Date().toISOString().slice(0, 7) + "-01";
+    const { data: usageRow } = await supabase
+      .from("usage")
+      .select("analyses_used")
+      .eq("user_id", user.id)
+      .eq("billing_month", billingMonth)
+      .maybeSingle();
 
-  if (usageError) {
-    console.error("Usage RPC error:", usageError);
-    return NextResponse.json(
-      { success: false, error: "Usage check failed" },
-      { status: 500 }
-    );
-  }
-
-  if (!usageData?.allowed) {
-    return NextResponse.json(
-      {
-        success: false,
-        error: "You've used all 3 free analyses this month. Upgrade to continue.",
-        limitReached: true, // flag for client to detect and show UpgradePrompt
-      },
-      { status: 429 }
-    );
+    const used = usageRow?.analyses_used ?? 0;
+    if (used >= 3) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "You've used all 3 free analyses this month. Upgrade to continue.",
+          limitReached: true,
+        },
+        { status: 429 }
+      );
+    }
   }
 
   // 2c. Cache check — return fresh cached report if analyzed within last hour (AI-06, D-15)
@@ -220,6 +218,16 @@ export async function POST(request: NextRequest) {
       });
     } catch {
       // Cache write failure is non-fatal
+    }
+
+    // Increment usage only on SUCCESS (failed analyses don't count)
+    try {
+      await supabase.rpc("check_and_increment_usage", {
+        p_user_id: user.id,
+        p_limit: isPro ? 999999 : 3,
+      });
+    } catch {
+      // Usage increment failure is non-fatal — user already got their report
     }
 
     return NextResponse.json({ success: true, report: analysis.report });

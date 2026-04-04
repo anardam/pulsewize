@@ -224,7 +224,7 @@ export default function AnalyzePage() {
 
   if (state === "manual") {
     return (
-      <main className="min-h-screen bg-[#0d0d0d]">
+      <div>
         <div className="max-w-3xl mx-auto px-6 py-8">
           <ManualEntryForm
             username={username}
@@ -233,36 +233,33 @@ export default function AnalyzePage() {
             onBack={handleBack}
           />
         </div>
-      </main>
+      </div>
     );
   }
 
   if (state === "results" && report) {
     return (
-      <motion.main
-        className="min-h-screen bg-[#0d0d0d]"
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="max-w-6xl mx-auto px-6 py-8">
-          <ReportDashboard
-            report={report}
-            platform={platform}
-            onNewAnalysis={() => {
-              setState("platform");
-              setReport(null);
-              setUsername("");
-            }}
-          />
-        </div>
-      </motion.main>
+        <ReportDashboard
+          report={report}
+          platform={platform}
+          onNewAnalysis={() => {
+            setState("platform");
+            setReport(null);
+            setUsername("");
+          }}
+        />
+      </motion.div>
     );
   }
 
   if (state === "upgrade") {
     return (
-      <motion.main className="min-h-screen bg-[#0d0d0d]" {...fadeUp}>
+      <motion.div {...fadeUp}>
         <div className="max-w-2xl mx-auto px-6 py-12">
           <h1 className="text-xl font-bold mb-2">Monthly limit reached</h1>
           <p className="text-sm text-[#8a8580] mb-8">
@@ -280,13 +277,13 @@ export default function AnalyzePage() {
             Back to platforms
           </button>
         </div>
-      </motion.main>
+      </motion.div>
     );
   }
 
   if (state === "error") {
     return (
-      <motion.main className="min-h-screen bg-[#0d0d0d]" {...fadeUp}>
+      <motion.div {...fadeUp}>
         <div className="max-w-3xl mx-auto px-6 py-12 text-center">
           <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-red-500/10 mb-4">
             <RotateCcw size={20} className="text-red-400" />
@@ -301,7 +298,7 @@ export default function AnalyzePage() {
             Try again
           </button>
         </div>
-      </motion.main>
+      </motion.div>
     );
   }
 
@@ -317,7 +314,7 @@ export default function AnalyzePage() {
     );
 
     return (
-      <main className="min-h-screen bg-[#0d0d0d]">
+      <div>
         <div className="max-w-4xl mx-auto px-6 py-10">
           <motion.div {...fadeUp}>
             <h1 className="text-2xl font-bold tracking-tight">Analyze</h1>
@@ -420,7 +417,7 @@ export default function AnalyzePage() {
             </div>
           </motion.div>
         </div>
-      </main>
+      </div>
     );
   }
 
@@ -434,7 +431,7 @@ export default function AnalyzePage() {
 
   return (
     <AnimatePresence mode="wait">
-      <motion.main key="input" className="min-h-screen bg-[#0d0d0d]" {...fadeUp}>
+      <motion.div key="input" {...fadeUp}>
         <div className="max-w-lg mx-auto px-6 py-12">
           {/* Back button */}
           <button
@@ -549,7 +546,7 @@ export default function AnalyzePage() {
             </motion.div>
           )}
         </div>
-      </motion.main>
+      </motion.div>
     </AnimatePresence>
   );
 }
