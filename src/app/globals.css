@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --background: 240 14% 4%;
+  --foreground: 0 0% 93%;
+}
+
+.dark {
+  --background: 240 14% 4%;        /* #0a0a0f */
+  --foreground: 0 0% 93%;          /* #ededed */
+  --card: 240 14% 7%;              /* #111118 */
+  --card-foreground: 0 0% 93%;
+  --popover: 240 14% 7%;
+  --popover-foreground: 0 0% 93%;
+  --primary: 271 91% 65%;          /* #a855f7 — Tesserix violet theme */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 14% 11%;        /* #1a1a2e */
+  --secondary-foreground: 0 0% 93%;
+  --muted: 240 14% 11%;
+  --muted-foreground: 0 0% 60%;
+  --accent: 271 91% 65%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;        /* #ef4444 */
+  --destructive-foreground: 0 0% 100%;
+  --border: 240 14% 15%;
+  --input: 240 14% 11%;
+  --ring: 271 91% 65%;
+  --radius: 0.5rem;
+}
+
+body {
+  color: hsl(var(--foreground));
+  background: hsl(var(--background));
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #1a1a2e;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #a855f7, #ec4899);
+  border-radius: 4px;
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, #a855f7, #ec4899, #f97316);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card glow effect */
+.card-glow {
+  position: relative;
+}
+.card-glow::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, #a855f7, #ec4899);
+  opacity: 0.2;
+  z-index: -1;
+  transition: opacity 0.3s;
+}
+.card-glow:hover::before {
+  opacity: 0.4;
+}
+
+/* Progress bar animation */
+@keyframes progress-fill {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+.animate-progress {
+  animation: progress-fill 2s ease-in-out;
+}

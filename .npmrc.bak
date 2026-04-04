@@ -1,0 +1,3 @@
+# .npmrc — private registry for @tesserix packages
+@tesserix:registry=https://npm.tesserix.dev
+//npm.tesserix.dev/:_authToken=${TESSERIX_NPM_TOKEN}
