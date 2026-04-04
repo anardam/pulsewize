@@ -4,75 +4,111 @@
 
 :root {
   color-scheme: dark;
-  --background: 240 14% 4%;
-  --foreground: 0 0% 93%;
+  --background: 0 0% 5%;
+  --foreground: 30 10% 90%;
 }
 
 .dark {
-  --background: 240 14% 4%;        /* #0a0a0f */
-  --foreground: 0 0% 93%;          /* #ededed */
-  --card: 240 14% 7%;              /* #111118 */
-  --card-foreground: 0 0% 93%;
-  --popover: 240 14% 7%;
-  --popover-foreground: 0 0% 93%;
-  --primary: 271 91% 65%;          /* #a855f7 — Tesserix violet theme */
+  --background: 0 0% 5%;             /* #0d0d0d — true black charcoal */
+  --foreground: 30 10% 90%;          /* #e8e4df — warm off-white */
+  --card: 0 0% 8%;                   /* #141414 — elevated surface */
+  --card-foreground: 30 10% 90%;
+  --popover: 0 0% 8%;
+  --popover-foreground: 30 10% 90%;
+  --primary: 347 77% 64%;            /* #e1467c — rose */
   --primary-foreground: 0 0% 100%;
-  --secondary: 240 14% 11%;        /* #1a1a2e */
-  --secondary-foreground: 0 0% 93%;
-  --muted: 240 14% 11%;
-  --muted-foreground: 0 0% 60%;
-  --accent: 271 91% 65%;
+  --secondary: 0 0% 10%;             /* #1a1a1a */
+  --secondary-foreground: 30 10% 90%;
+  --muted: 0 0% 12%;
+  --muted-foreground: 30 5% 50%;     /* warm gray */
+  --accent: 347 77% 64%;
   --accent-foreground: 0 0% 100%;
-  --destructive: 0 84% 60%;        /* #ef4444 */
+  --destructive: 0 72% 55%;
   --destructive-foreground: 0 0% 100%;
-  --border: 240 14% 15%;
-  --input: 240 14% 11%;
-  --ring: 271 91% 65%;
-  --radius: 0.5rem;
+  --border: 0 0% 14%;
+  --input: 0 0% 10%;
+  --ring: 347 77% 64%;
+  --radius: 0.625rem;
 }
 
+/* Base typography */
 body {
   color: hsl(var(--foreground));
   background: hsl(var(--background));
-  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar */
+/* Subtle film grain overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* Custom scrollbar — minimal */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #1a1a2e;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #a855f7, #ec4899);
-  border-radius: 4px;
+  background: hsl(347 77% 64% / 0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(347 77% 64% / 0.5);
 }
 
-/* Gradient text utility */
+/* Rose gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #a855f7, #ec4899, #f97316);
+  background: linear-gradient(135deg, #e1467c 0%, #f0728a 50%, #d4a574 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Card glow effect */
+/* Card hover glow — warm rose */
 .card-glow {
   position: relative;
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.card-glow:hover {
+  transform: translateY(-2px);
 }
 .card-glow::before {
   content: "";
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  background: linear-gradient(135deg, #a855f7, #ec4899);
-  opacity: 0.2;
+  background: linear-gradient(135deg, hsl(347 77% 64% / 0.15), hsl(30 60% 60% / 0.08));
+  opacity: 0;
   z-index: -1;
-  transition: opacity 0.3s;
+  transition: opacity 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
 .card-glow:hover::before {
-  opacity: 0.4;
+  opacity: 1;
+}
+
+/* Stagger animation for page loads */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
 }
 
 /* Progress bar animation */
@@ -82,4 +118,21 @@ body {
 }
 .animate-progress {
   animation: progress-fill 2s ease-in-out;
+}
+
+/* Subtle horizontal rule with rose center */
+.divider-rose {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    hsl(347 77% 64% / 0.2) 50%,
+    transparent 100%
+  );
+}
+
+/* Focus ring — rose */
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(347 77% 64% / 0.5);
 }

@@ -36,44 +36,43 @@ export function UserMenu({ email }: Props) {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm hover:bg-white/[0.06] transition-colors"
+        className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm hover:bg-white/[0.05] transition-all duration-200"
         aria-expanded={open}
         aria-haspopup="true"
       >
-        {/* Avatar */}
-        <div className="h-7 w-7 rounded-full bg-violet-600 flex items-center justify-center text-xs font-semibold text-white select-none">
+        <div className="h-7 w-7 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center text-[10px] font-bold text-white select-none ring-2 ring-rose-500/20">
           {initials}
         </div>
-        <span className="hidden sm:block text-sm text-[#ededed] max-w-[120px] truncate">
+        <span className="hidden sm:block text-[13px] text-[#e8e4df] max-w-[120px] truncate">
           {displayName}
         </span>
-        <ChevronDown size={14} className="text-muted-foreground" />
+        <ChevronDown size={13} className="text-[#8a8580]" />
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-56 rounded-xl border border-white/[0.08] bg-[#111118] shadow-xl z-50 py-1 text-sm">
-          {/* Email label */}
-          <div className="px-3 py-2 text-xs text-muted-foreground truncate border-b border-white/[0.08]">
+        <div className="absolute right-0 mt-2 w-56 rounded-xl border border-white/[0.08] bg-[#141414] shadow-2xl shadow-black/40 z-50 py-1 text-sm backdrop-blur-xl">
+          <div className="px-3 py-2.5 text-xs text-[#8a8580] truncate border-b border-white/[0.06]">
             {email}
           </div>
 
-          {/* Settings */}
           <button
-            onClick={() => { setOpen(false); router.push("/settings"); }}
-            className="w-full flex items-center gap-2 px-3 py-2 hover:bg-white/[0.06] transition-colors text-left"
+            onClick={() => {
+              setOpen(false);
+              router.push("/settings");
+            }}
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-white/[0.05] transition-colors text-left"
           >
-            <Settings size={15} className="text-muted-foreground" />
-            <span>Settings</span>
+            <Settings size={14} className="text-[#8a8580]" />
+            <span className="text-[#e8e4df]">Settings</span>
           </button>
 
-          <div className="border-t border-white/[0.08] my-1" />
+          <div className="border-t border-white/[0.06] my-0.5" />
 
-          {/* Log out */}
           <button
             onClick={handleSignOut}
-            className="w-full flex items-center gap-2 px-3 py-2 hover:bg-white/[0.06] transition-colors text-left text-muted-foreground hover:text-[#ededed]"
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-white/[0.05] transition-colors text-left text-[#8a8580] hover:text-[#e8e4df]"
           >
-            <LogOut size={15} />
+            <LogOut size={14} />
             <span>Log out</span>
           </button>
         </div>
