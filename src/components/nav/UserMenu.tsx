@@ -50,7 +50,7 @@ export function UserMenu({ email }: Props) {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-56 rounded-xl border border-white/[0.08] bg-[#141414] shadow-2xl shadow-black/40 z-50 py-1 text-sm backdrop-blur-xl">
+        <div className="absolute right-0 mt-2 w-56 rounded-xl border border-white/[0.06] bg-[#141414] shadow-2xl shadow-black/40 z-50 py-1 text-sm backdrop-blur-xl">
           <div className="px-3 py-2.5 text-xs text-[#8a8580] truncate border-b border-white/[0.06]">
             {email}
           </div>

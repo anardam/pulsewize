@@ -135,7 +135,7 @@ export default function CompetitorComparison({ platform, currentUsername, curren
   if (state === "loading") {
     return (
       <div className="flex flex-col items-center justify-center py-16 gap-4">
-        <div className="w-12 h-12 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+        <div className="w-12 h-12 border-4 border-rose-500/30 border-t-rose-500 rounded-full animate-spin" />
         <p className="text-gray-400">Analyzing competitors...</p>
       </div>
     );
@@ -148,13 +148,13 @@ export default function CompetitorComparison({ platform, currentUsername, curren
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold gradient-text">Competitor Comparison</h2>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <p className="text-xs text-[#8a8580] mt-0.5">
               {report.platform} &middot; {new Date(report.analyzedAt).toLocaleString()}
             </p>
           </div>
           <button
             onClick={handleReset}
-            className="text-xs text-gray-400 hover:text-white transition-colors border border-gray-700 px-3 py-1.5 rounded-lg"
+            className="text-xs text-gray-400 hover:text-white transition-colors border border-white/[0.06] px-3 py-1.5 rounded-lg"
           >
             Compare Again
           </button>
@@ -188,12 +188,12 @@ export default function CompetitorComparison({ platform, currentUsername, curren
                       key={cell.username}
                       className={`px-4 py-3 text-center ${
                         cell.isLeader
-                          ? "bg-purple-500/20 text-purple-300 font-semibold"
+                          ? "bg-rose-500/20 text-rose-300 font-semibold"
                           : "text-gray-300"
                       }`}
                     >
                       {cell.isLeader && (
-                        <span className="mr-1 text-purple-400 text-xs">*</span>
+                        <span className="mr-1 text-rose-400 text-xs">*</span>
                       )}
                       {cell.value}
                     </td>
@@ -250,8 +250,8 @@ export default function CompetitorComparison({ platform, currentUsername, curren
             type="button"
             className={`px-3 py-1.5 rounded-lg text-sm ${
               mode === "handles"
-                ? "bg-violet-600 text-white"
-                : "bg-[#111118] border border-white/[0.08] text-muted-foreground"
+                ? "bg-rose-600 text-white"
+                : "bg-[#141414] border border-white/[0.06] text-[#8a8580]"
             }`}
             onClick={() => { setMode("handles"); setError(null); }}
           >
@@ -261,8 +261,8 @@ export default function CompetitorComparison({ platform, currentUsername, curren
             type="button"
             className={`px-3 py-1.5 rounded-lg text-sm ${
               mode === "saved"
-                ? "bg-violet-600 text-white"
-                : "bg-[#111118] border border-white/[0.08] text-muted-foreground"
+                ? "bg-rose-600 text-white"
+                : "bg-[#141414] border border-white/[0.06] text-[#8a8580]"
             }`}
             onClick={() => { setMode("saved"); setError(null); }}
           >
@@ -275,7 +275,7 @@ export default function CompetitorComparison({ platform, currentUsername, curren
             {/* Current profile pre-filled */}
             <div>
               <label className="block text-xs text-gray-400 mb-1">Your profile (current)</label>
-              <div className="px-3 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg text-gray-300 text-sm">
+              <div className="px-3 py-2 bg-[#141414] border border-white/[0.06] rounded-lg text-gray-300 text-sm">
                 @{currentUsername}
               </div>
             </div>
@@ -290,7 +290,7 @@ export default function CompetitorComparison({ platform, currentUsername, curren
                 onChange={(e) => setUsernames(e.target.value)}
                 placeholder="competitor1, competitor2"
                 rows={2}
-                className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-purple-500 resize-none"
+                className="w-full px-3 py-2 bg-[#141414] border border-white/[0.06] rounded-lg text-white placeholder-[#5a5550] text-sm focus:outline-none focus:border-rose-500 resize-none"
               />
             </div>
 
@@ -298,7 +298,7 @@ export default function CompetitorComparison({ platform, currentUsername, curren
 
             <button
               onClick={handleCompare}
-              className="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 rounded-lg text-white font-semibold hover:opacity-90 transition-opacity"
+              className="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500 rounded-lg text-white font-semibold hover:opacity-90 transition-opacity"
             >
               Compare
             </button>
@@ -313,7 +313,7 @@ export default function CompetitorComparison({ platform, currentUsername, curren
 
             {savedLoading && (
               <div className="flex items-center gap-2 text-sm text-gray-400">
-                <div className="w-4 h-4 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-rose-500/30 border-t-rose-500 rounded-full animate-spin" />
                 Loading saved reports...
               </div>
             )}
@@ -321,7 +321,7 @@ export default function CompetitorComparison({ platform, currentUsername, curren
             {savedError && <p className="text-red-400 text-xs">{savedError}</p>}
 
             {!savedLoading && !savedError && savedReports.length === 0 && (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-[#8a8580]">
                 No saved reports found. Analyze some profiles first.
               </p>
             )}
@@ -336,10 +336,10 @@ export default function CompetitorComparison({ platform, currentUsername, curren
                       <label
                         className={`flex items-center gap-3 px-3 py-2 rounded-lg border cursor-pointer transition-colors ${
                           isSelected
-                            ? "border-violet-500/50 bg-violet-500/10"
+                            ? "border-rose-500/50 bg-rose-500/10"
                             : isDisabled
-                            ? "border-gray-700/50 bg-gray-800/30 opacity-50 cursor-not-allowed"
-                            : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
+                            ? "border-white/[0.06] bg-[#1a1a1a]/30 opacity-50 cursor-not-allowed"
+                            : "border-white/[0.06] bg-[#141414] hover:border-gray-600"
                         }`}
                       >
                         <input
@@ -347,10 +347,10 @@ export default function CompetitorComparison({ platform, currentUsername, curren
                           checked={isSelected}
                           disabled={isDisabled}
                           onChange={() => handleSavedToggle(r.username)}
-                          className="accent-violet-500"
+                          className="accent-rose-500"
                         />
                         <span className="text-sm text-gray-300">@{r.username}</span>
-                        <span className="text-xs text-gray-500 ml-auto">{r.platform}</span>
+                        <span className="text-xs text-[#8a8580] ml-auto">{r.platform}</span>
                       </label>
                     </li>
                   );
@@ -364,7 +364,7 @@ export default function CompetitorComparison({ platform, currentUsername, curren
               type="button"
               onClick={handleUseSavedReports}
               disabled={selectedUsernames.length === 0}
-              className="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 rounded-lg text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500 rounded-lg text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Compare selected ({selectedUsernames.length})
             </button>

@@ -66,7 +66,7 @@ export default function HashtagStrategy({ platform, username, report }: Props) {
   if (state === "loading") {
     return (
       <div className="flex flex-col items-center justify-center py-16 gap-4">
-        <div className="w-12 h-12 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+        <div className="w-12 h-12 border-4 border-rose-500/30 border-t-rose-500 rounded-full animate-spin" />
         <p className="text-gray-400">Generating hashtag strategy...</p>
       </div>
     );
@@ -79,22 +79,22 @@ export default function HashtagStrategy({ platform, username, report }: Props) {
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
             <h2 className="text-xl font-bold gradient-text">Hashtag Strategy</h2>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <p className="text-xs text-[#8a8580] mt-0.5">
               @{strategy.username} &middot; {strategy.niche} &middot;{" "}
               {new Date(strategy.generatedAt).toLocaleDateString()}
             </p>
           </div>
           <button
             onClick={() => { setState("idle"); setStrategy(null); }}
-            className="text-xs border border-gray-700 text-gray-400 hover:text-white transition-colors px-3 py-1.5 rounded-lg"
+            className="text-xs border border-white/[0.06] text-gray-400 hover:text-white transition-colors px-3 py-1.5 rounded-lg"
           >
             Regenerate
           </button>
         </div>
 
         {/* Caption Mix Formula */}
-        <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-xl p-4">
-          <p className="text-xs text-purple-400 font-semibold uppercase tracking-wide mb-1.5">
+        <div className="bg-gradient-to-r from-rose-500/10 to-rose-400/10 border border-rose-500/20 rounded-xl p-4">
+          <p className="text-xs text-rose-400 font-semibold uppercase tracking-wide mb-1.5">
             Caption Mix Formula
           </p>
           <p className="text-white font-semibold text-sm">{strategy.captionMixFormula}</p>
@@ -119,7 +119,7 @@ export default function HashtagStrategy({ platform, username, report }: Props) {
 
               {/* Reach + Recommendation */}
               <div className="flex items-center gap-2 text-xs text-gray-400">
-                <span className="text-purple-400">~{category.estimatedReach}</span>
+                <span className="text-rose-400">~{category.estimatedReach}</span>
                 <span>&middot;</span>
                 <span>{category.recommendation}</span>
               </div>
@@ -130,8 +130,8 @@ export default function HashtagStrategy({ platform, username, report }: Props) {
                   <button
                     key={j}
                     onClick={() => handleCopyTag(tag)}
-                    className={`px-2 py-0.5 text-xs bg-purple-500/10 text-purple-300 border border-purple-500/20 rounded-full transition-colors ${
-                      copiedTag === tag ? "bg-purple-500/30 text-purple-200" : "hover:bg-purple-500/20"
+                    className={`px-2 py-0.5 text-xs bg-rose-500/10 text-rose-300 border border-rose-500/20 rounded-full transition-colors ${
+                      copiedTag === tag ? "bg-rose-500/30 text-rose-200" : "hover:bg-rose-500/20"
                     }`}
                     title="Click to copy"
                   >
@@ -182,8 +182,8 @@ export default function HashtagStrategy({ platform, username, report }: Props) {
       </div>
 
       <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 sm:p-8 card-glow flex flex-col items-center text-center gap-4">
-        <div className="w-16 h-16 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
-          <svg className="w-8 h-8 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="w-16 h-16 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
+          <svg className="w-8 h-8 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
           </svg>
         </div>
@@ -198,7 +198,7 @@ export default function HashtagStrategy({ platform, username, report }: Props) {
 
         <button
           onClick={handleGenerate}
-          className="px-8 py-3 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 rounded-lg text-white font-semibold hover:opacity-90 transition-opacity"
+          className="px-8 py-3 bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500 rounded-lg text-white font-semibold hover:opacity-90 transition-opacity"
         >
           Get Hashtag Strategy
         </button>

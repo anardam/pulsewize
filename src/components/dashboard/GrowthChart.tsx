@@ -19,9 +19,9 @@ interface Props {
 export function GrowthChart({ data, title = "Growth Trend" }: Props) {
   if (data.length < 2) {
     return (
-      <div className="bg-[#111118] border border-white/[0.08] rounded-xl p-6">
+      <div className="bg-[#141414] border border-white/[0.06] rounded-xl p-6">
         <p className="text-sm font-medium mb-2">{title}</p>
-        <div className="flex items-center justify-center h-[220px] text-sm text-muted-foreground">
+        <div className="flex items-center justify-center h-[220px] text-sm text-[#8a8580]">
           Analyze the same profile again to track growth
         </div>
       </div>
@@ -29,7 +29,7 @@ export function GrowthChart({ data, title = "Growth Trend" }: Props) {
   }
 
   return (
-    <div className="bg-[#111118] border border-white/[0.08] rounded-xl p-6">
+    <div className="bg-[#141414] border border-white/[0.06] rounded-xl p-6">
       <p className="text-sm font-medium mb-4">{title}</p>
       <ResponsiveContainer width="100%" height={220}>
         <AreaChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>

@@ -77,19 +77,19 @@ export function ProfileEditSection({ userId, initialDisplayName, initialAvatarUr
   }
 
   return (
-    <div className="mt-6 bg-[#111118] border border-white/[0.08] rounded-xl p-6">
+    <div className="mt-6 bg-[#141414] border border-white/[0.06] rounded-xl p-6">
       <h2 className="text-base font-semibold">Profile</h2>
       <form onSubmit={handleSave} className="mt-4 space-y-4">
         {/* Avatar */}
         <div className="flex items-center gap-4">
           <div
-            className="h-14 w-14 rounded-full bg-violet-600/20 border border-violet-500/20 flex items-center justify-center overflow-hidden cursor-pointer"
+            className="h-14 w-14 rounded-full bg-rose-600/20 border border-rose-500/20 flex items-center justify-center overflow-hidden cursor-pointer"
             onClick={() => fileRef.current?.click()}
           >
             {avatarUrl ? (
               <img src={avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
             ) : (
-              <span className="text-xl text-violet-400">
+              <span className="text-xl text-rose-400">
                 {(displayName?.[0] ?? "?").toUpperCase()}
               </span>
             )}
@@ -98,11 +98,11 @@ export function ProfileEditSection({ userId, initialDisplayName, initialAvatarUr
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="text-sm text-violet-400 hover:text-violet-300"
+              className="text-sm text-rose-400 hover:text-rose-300"
             >
               {uploading ? "Uploading…" : "Change avatar"}
             </button>
-            <p className="text-xs text-muted-foreground mt-0.5">PNG or JPG, max 2MB</p>
+            <p className="text-xs text-[#8a8580] mt-0.5">PNG or JPG, max 2MB</p>
           </div>
           <input
             ref={fileRef}
@@ -120,7 +120,7 @@ export function ProfileEditSection({ userId, initialDisplayName, initialAvatarUr
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
             maxLength={64}
-            className="w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#0a0a0f] text-sm text-[#ededed] focus:outline-none focus:ring-1 focus:ring-violet-500"
+            className="w-full px-3 py-2 rounded-lg border border-white/[0.06] bg-[#0d0d0d] text-sm text-[#e8e4df] focus:outline-none focus:ring-1 focus:ring-rose-500"
           />
         </div>
         {error && <p className="text-xs text-red-400">{error}</p>}
@@ -128,7 +128,7 @@ export function ProfileEditSection({ userId, initialDisplayName, initialAvatarUr
         <button
           type="submit"
           disabled={saving}
-          className="px-4 py-2 rounded-lg text-sm font-medium bg-violet-600 hover:bg-violet-500 text-white transition-colors disabled:opacity-50"
+          className="px-4 py-2 rounded-lg text-sm font-medium bg-rose-600 hover:bg-rose-500 text-white transition-colors disabled:opacity-50"
         >
           {saving ? "Saving…" : "Save changes"}
         </button>

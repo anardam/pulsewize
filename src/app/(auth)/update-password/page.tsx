@@ -42,11 +42,11 @@ export default function UpdatePasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center px-4">
-      <div className="w-full max-w-sm bg-[#111118] border border-white/[0.08] rounded-xl p-8 flex flex-col gap-4">
+    <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center px-4">
+      <div className="w-full max-w-sm bg-[#141414] border border-white/[0.06] rounded-xl p-8 flex flex-col gap-4">
         <div>
           <h1 className="text-xl font-semibold">Set new password</h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-sm text-[#8a8580] mt-1">
             {success
               ? "Password updated. Redirecting to dashboard…"
               : "Enter your new password below."}
@@ -68,7 +68,7 @@ export default function UpdatePasswordPage() {
                 required
                 minLength={8}
                 disabled={loading}
-                className="w-full px-3 py-2 rounded-lg border border-white/[0.12] bg-[#0a0a0f] text-sm text-[#ededed] placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-violet-500 disabled:opacity-50"
+                className="w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#0d0d0d] text-sm text-[#e8e4df] placeholder:text-[#8a8580] focus:outline-none focus:ring-1 focus:ring-rose-500 disabled:opacity-50"
               />
             </div>
             <div>
@@ -83,7 +83,7 @@ export default function UpdatePasswordPage() {
                 onChange={(e) => setConfirm(e.target.value)}
                 required
                 disabled={loading}
-                className="w-full px-3 py-2 rounded-lg border border-white/[0.12] bg-[#0a0a0f] text-sm text-[#ededed] placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-violet-500 disabled:opacity-50"
+                className="w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#0d0d0d] text-sm text-[#e8e4df] placeholder:text-[#8a8580] focus:outline-none focus:ring-1 focus:ring-rose-500 disabled:opacity-50"
               />
             </div>
 
@@ -94,7 +94,7 @@ export default function UpdatePasswordPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center px-4 py-2.5 rounded-lg text-sm font-medium bg-violet-600 hover:bg-violet-500 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center px-4 py-2.5 rounded-lg text-sm font-medium bg-rose-600 hover:bg-rose-500 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="flex items-center gap-2">
@@ -113,7 +113,7 @@ export default function UpdatePasswordPage() {
 
         {success && (
           <div className="flex items-center justify-center py-4">
-            <svg className="animate-spin h-5 w-5 text-violet-400" viewBox="0 0 24 24" fill="none">
+            <svg className="animate-spin h-5 w-5 text-rose-400" viewBox="0 0 24 24" fill="none">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>

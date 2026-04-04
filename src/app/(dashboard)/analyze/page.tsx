@@ -296,7 +296,7 @@ export default function AnalyzePage() {
           </p>
           <button
             onClick={handleBack}
-            className="px-5 py-2.5 rounded-lg text-sm font-medium bg-white/[0.06] hover:bg-white/[0.1] text-[#e8e4df] border border-white/[0.08] transition-all duration-200"
+            className="px-5 py-2.5 rounded-lg text-sm font-medium bg-white/[0.06] hover:bg-white/[0.1] text-[#e8e4df] border border-white/[0.06] transition-all duration-200"
           >
             Try again
           </button>

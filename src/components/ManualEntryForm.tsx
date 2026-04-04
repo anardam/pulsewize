@@ -53,16 +53,16 @@ export default function ManualEntryForm({
   };
 
   const inputClass =
-    "w-full px-4 py-2.5 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors";
+    "w-full px-4 py-2.5 bg-[#141414] border border-white/[0.06] rounded-lg text-white placeholder-[#5a5550] focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-colors";
   const labelClass = "block text-sm font-medium text-gray-300 mb-1";
 
   return (
     <div className="max-w-2xl mx-auto">
       {/* Info banner */}
-      <div className="mb-6 p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+      <div className="mb-6 p-4 bg-rose-500/10 border border-rose-500/30 rounded-lg">
         <div className="flex items-start gap-3">
           <svg
-            className="w-5 h-5 text-purple-400 mt-0.5 shrink-0"
+            className="w-5 h-5 text-rose-400 mt-0.5 shrink-0"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -75,15 +75,15 @@ export default function ManualEntryForm({
             />
           </svg>
           <div>
-            <p className="text-purple-300 font-medium">
+            <p className="text-rose-300 font-medium">
               Enter your profile details below
             </p>
-            <p className="text-purple-400/70 text-sm mt-1">
+            <p className="text-rose-400/70 text-sm mt-1">
               {errorMessage.includes("manually")
                 ? "Fill in the fields below — the full AI analysis will run just the same."
                 : "Instagram doesn\u2019t allow automated profile lookups, so we need a few numbers from you. You\u2019ll get the exact same AI-powered report."}
             </p>
-            <p className="text-gray-500 text-xs mt-2">
+            <p className="text-[#8a8580] text-xs mt-2">
               Tip: open your Instagram profile in a browser to copy the numbers.
             </p>
           </div>
@@ -231,7 +231,7 @@ export default function ManualEntryForm({
               name="isVerified"
               checked={form.isVerified}
               onChange={handleChange}
-              className="w-4 h-4 rounded border-gray-700 bg-gray-800 text-purple-500 focus:ring-purple-500"
+              className="w-4 h-4 rounded border-white/[0.06] bg-[#1a1a1a] text-rose-500 focus:ring-rose-500"
             />
             <label className="text-sm text-gray-300">Verified account</label>
           </div>
@@ -240,13 +240,13 @@ export default function ManualEntryForm({
             <button
               type="button"
               onClick={onBack}
-              className="px-6 py-2.5 border border-gray-700 rounded-lg text-gray-300 hover:bg-gray-800 transition-colors"
+              className="px-6 py-2.5 border border-white/[0.06] rounded-lg text-gray-300 hover:bg-[#1a1a1a] transition-colors"
             >
               Back
             </button>
             <button
               type="submit"
-              className="flex-1 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg text-white font-semibold hover:from-purple-500 hover:to-pink-500 transition-all"
+              className="flex-1 py-2.5 bg-gradient-to-r from-rose-600 to-rose-500 rounded-lg text-white font-semibold hover:from-rose-500 hover:to-rose-400 transition-all"
             >
               Run Analysis
             </button>

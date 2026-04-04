@@ -29,9 +29,9 @@ export function CancelDialog({ isOpen, onClose, onConfirm }: CancelDialogProps) 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-      <div className="w-full max-w-sm rounded-xl border border-white/[0.08] bg-[#111118] p-6">
-        <h3 className="text-base font-semibold text-[#ededed]">Cancel subscription?</h3>
-        <p className="mt-2 text-sm text-muted-foreground">
+      <div className="w-full max-w-sm rounded-xl border border-white/[0.06] bg-[#141414] p-6">
+        <h3 className="text-base font-semibold text-[#e8e4df]">Cancel subscription?</h3>
+        <p className="mt-2 text-sm text-[#8a8580]">
           Your Pro access continues until the end of the current billing period.
           After that, your account reverts to the free tier (3 analyses/month).
         </p>
@@ -40,7 +40,7 @@ export function CancelDialog({ isOpen, onClose, onConfirm }: CancelDialogProps) 
           <button
             onClick={onClose}
             disabled={isLoading}
-            className="flex-1 rounded-lg border border-white/[0.12] px-4 py-2 text-sm text-[#ededed] hover:bg-white/[0.04] disabled:opacity-60 transition-colors"
+            className="flex-1 rounded-lg border border-white/[0.08] px-4 py-2 text-sm text-[#e8e4df] hover:bg-white/[0.04] disabled:opacity-60 transition-colors"
           >
             Keep subscription
           </button>

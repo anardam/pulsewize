@@ -61,7 +61,7 @@ export function PasswordUpdateSection({ currentEmail }: Props) {
   }
 
   return (
-    <div className="mt-4 bg-[#111118] border border-white/[0.08] rounded-xl p-6">
+    <div className="mt-4 bg-[#141414] border border-white/[0.06] rounded-xl p-6">
       <h2 className="text-base font-semibold">Email &amp; Password</h2>
       <form onSubmit={handleSubmit} className="mt-4 space-y-4">
         <div>
@@ -70,7 +70,7 @@ export function PasswordUpdateSection({ currentEmail }: Props) {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#0a0a0f] text-sm text-[#ededed] focus:outline-none focus:ring-1 focus:ring-violet-500"
+            className="w-full px-3 py-2 rounded-lg border border-white/[0.06] bg-[#0d0d0d] text-sm text-[#e8e4df] focus:outline-none focus:ring-1 focus:ring-rose-500"
           />
         </div>
         <div>
@@ -80,7 +80,7 @@ export function PasswordUpdateSection({ currentEmail }: Props) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Leave blank to keep current"
-            className="w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#0a0a0f] text-sm text-[#ededed] placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-violet-500"
+            className="w-full px-3 py-2 rounded-lg border border-white/[0.06] bg-[#0d0d0d] text-sm text-[#e8e4df] placeholder:text-[#8a8580] focus:outline-none focus:ring-1 focus:ring-rose-500"
           />
         </div>
         <div>
@@ -90,7 +90,7 @@ export function PasswordUpdateSection({ currentEmail }: Props) {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="Repeat new password"
-            className="w-full px-3 py-2 rounded-lg border border-white/[0.08] bg-[#0a0a0f] text-sm text-[#ededed] placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-violet-500"
+            className="w-full px-3 py-2 rounded-lg border border-white/[0.06] bg-[#0d0d0d] text-sm text-[#e8e4df] placeholder:text-[#8a8580] focus:outline-none focus:ring-1 focus:ring-rose-500"
           />
         </div>
         {error && <p className="text-xs text-red-400">{error}</p>}
@@ -98,7 +98,7 @@ export function PasswordUpdateSection({ currentEmail }: Props) {
         <button
           type="submit"
           disabled={saving}
-          className="px-4 py-2 rounded-lg text-sm font-medium bg-violet-600 hover:bg-violet-500 text-white transition-colors disabled:opacity-50"
+          className="px-4 py-2 rounded-lg text-sm font-medium bg-rose-600 hover:bg-rose-500 text-white transition-colors disabled:opacity-50"
         >
           {saving ? "Saving…" : "Update credentials"}
         </button>

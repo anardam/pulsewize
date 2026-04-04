@@ -42,7 +42,7 @@ export function BillingSection({
   }
 
   return (
-    <div className="mt-4 bg-[#111118] border border-white/[0.08] rounded-xl p-6">
+    <div className="mt-4 bg-[#141414] border border-white/[0.06] rounded-xl p-6">
       <h2 className="text-base font-semibold">Billing</h2>
 
       <div className="mt-4 space-y-4">
@@ -52,8 +52,8 @@ export function BillingSection({
           <span
             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${
               isPro
-                ? "border-violet-500/30 bg-violet-500/10 text-violet-300"
-                : "border-white/[0.12] text-[#ededed]"
+                ? "border-rose-500/30 bg-rose-500/10 text-rose-300"
+                : "border-white/[0.08] text-[#e8e4df]"
             }`}
           >
             {isPro ? "Pro" : "Free"}
@@ -68,7 +68,7 @@ export function BillingSection({
         {/* Usage */}
         <div>
           <label className="block text-sm font-medium mb-1.5">Analyses this month</label>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-[#8a8580]">
             {isPro ? (
               <span>{analysesUsed} used — unlimited remaining</span>
             ) : (
@@ -83,7 +83,7 @@ export function BillingSection({
         {isPro && currentPeriodEnd && (
           <div>
             <label className="block text-sm font-medium mb-1.5">Next billing date</label>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-[#8a8580]">
               {new Date(currentPeriodEnd).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
@@ -103,14 +103,14 @@ export function BillingSection({
                   key={invoice.id}
                   className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2"
                 >
-                  <span className="text-sm text-muted-foreground">
+                  <span className="text-sm text-[#8a8580]">
                     {new Date(invoice.createdAt * 1000).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "short",
                       day: "numeric",
                     })}
                   </span>
-                  <span className="text-sm text-[#ededed]">
+                  <span className="text-sm text-[#e8e4df]">
                     {invoice.currency.toUpperCase()} {(invoice.amount / 100).toFixed(2)}
                   </span>
                   <span
@@ -119,7 +119,7 @@ export function BillingSection({
                         ? "text-emerald-400"
                         : invoice.status === "failed"
                           ? "text-red-400"
-                          : "text-muted-foreground"
+                          : "text-[#8a8580]"
                     }`}
                   >
                     {invoice.status === "captured" ? "paid" : invoice.status}

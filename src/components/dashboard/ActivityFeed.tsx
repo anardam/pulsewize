@@ -64,7 +64,7 @@ export function ActivityFeed({ reports }: ActivityFeedProps) {
             </div>
             <div className="flex items-center gap-2">
               {typeLabel && (
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border border-white/[0.12] text-[#8a8580]">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border border-white/[0.08] text-[#8a8580]">
                   {typeLabel}
                 </span>
               )}

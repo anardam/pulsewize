@@ -120,7 +120,7 @@ export default async function SettingsPage() {
                   className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${
                     plan === "pro"
                       ? "border-rose-500/20 bg-rose-500/10 text-rose-300"
-                      : "border-white/[0.12] text-[#e8e4df]"
+                      : "border-white/[0.08] text-[#e8e4df]"
                   }`}
                 >
                   {plan === "pro" ? "Pro" : "Free"}

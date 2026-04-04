@@ -98,7 +98,7 @@ function Badge({
   variant?: "default" | "success" | "warning" | "danger";
 }) {
   const colors = {
-    default: "bg-purple-500/20 text-purple-300 border-purple-500/30",
+    default: "bg-rose-500/20 text-rose-300 border-rose-500/30",
     success: "bg-green-500/20 text-green-300 border-green-500/30",
     warning: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
     danger: "bg-red-500/20 text-red-300 border-red-500/30",
@@ -267,12 +267,12 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
         }
         .pdf-export .text-gray-300,
         .pdf-export .text-gray-400,
-        .pdf-export .text-gray-500,
+        .pdf-export .text-[#8a8580],
         .pdf-export .text-white {
           color: #374151 !important;
         }
-        .pdf-export .text-purple-300,
-        .pdf-export .text-purple-400 {
+        .pdf-export .text-rose-300,
+        .pdf-export .text-rose-400 {
           color: #7c3aed !important;
         }
         .pdf-export .text-pink-300,
@@ -298,15 +298,15 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
         .pdf-export .text-blue-400 {
           color: #2563eb !important;
         }
-        .pdf-export .bg-gray-800\\/30,
-        .pdf-export .bg-gray-800\\/50 {
+        .pdf-export .bg-[#1a1a1a]\\/30,
+        .pdf-export .bg-[#1a1a1a]\\/50 {
           background: #f3f4f6 !important;
         }
-        .pdf-export [class*="bg-purple-500\\/10"],
+        .pdf-export [class*="bg-rose-500\\/10"],
         .pdf-export [class*="bg-pink-500\\/10"],
         .pdf-export [class*="bg-green-500\\/10"],
-        .pdf-export [class*="from-purple-500\\/10"],
-        .pdf-export [class*="from-purple-500\\/20"] {
+        .pdf-export [class*="from-rose-500\\/10"],
+        .pdf-export [class*="from-rose-500\\/20"] {
           background: #f5f3ff !important;
         }
         .pdf-export .pdf-hide {
@@ -328,13 +328,13 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
           <button
             onClick={handleDownloadPdf}
             disabled={pdfLoading}
-            className="px-3 sm:px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg text-white text-sm font-medium hover:from-purple-500 hover:to-pink-500 transition-all disabled:opacity-50"
+            className="px-3 sm:px-4 py-2 bg-gradient-to-r from-rose-600 to-rose-500 rounded-lg text-white text-sm font-medium hover:from-rose-500 hover:to-rose-400 transition-all disabled:opacity-50"
           >
             {pdfLoading ? "Generating..." : "Download PDF"}
           </button>
           <button
             onClick={onNewAnalysis}
-            className="px-3 sm:px-4 py-2 border border-gray-700 rounded-lg text-gray-300 hover:bg-gray-800 transition-colors text-sm"
+            className="px-3 sm:px-4 py-2 border border-white/[0.06] rounded-lg text-gray-300 hover:bg-[#1a1a1a] transition-colors text-sm"
           >
             New Analysis
           </button>
@@ -356,7 +356,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
             onClick={() => setActiveTab(tab.id)}
             className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-colors border-b-2 -mb-px ${
               activeTab === tab.id
-                ? "border-purple-500 text-white"
+                ? "border-rose-500 text-white"
                 : "border-transparent text-gray-400 hover:text-white"
             }`}
           >
@@ -392,8 +392,8 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
 
       {/* Multi-agent badge */}
       {isMultiAgent && (
-        <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-500/10 border border-purple-500/20">
-          <span className="text-xs font-semibold text-purple-400 uppercase tracking-wider">Multi-Agent Analysis</span>
+        <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-rose-500/10 border border-rose-500/20">
+          <span className="text-xs font-semibold text-rose-400 uppercase tracking-wider">Multi-Agent Analysis</span>
           <span className="text-xs text-gray-400">Synthesized from {multiAgentMeta?.providerCount ?? 3} AI perspectives</span>
         </div>
       )}
@@ -421,7 +421,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
                   key={label}
                   className={`rounded-lg p-3 text-center border ${
                     isNeutral
-                      ? "bg-gray-800/30 border-gray-700/50"
+                      ? "bg-[#1a1a1a]/30 border-white/[0.06]"
                       : isPositive
                         ? "bg-green-500/10 border-green-500/20"
                         : "bg-red-500/10 border-red-500/20"
@@ -435,9 +435,9 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
                         {isPositive ? "\u25B2" : "\u25BC"}{Math.abs(Math.round(diff))}
                       </span>
                     )}
-                    {isNeutral && <span className="text-sm text-gray-500">=</span>}
+                    {isNeutral && <span className="text-sm text-[#8a8580]">=</span>}
                   </div>
-                  <p className="text-[10px] text-gray-500">was {prev}</p>
+                  <p className="text-[10px] text-[#8a8580]">was {prev}</p>
                 </div>
               );
             })}
@@ -452,7 +452,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
               const isPositive = diff > 0;
               const isNeutral = diff === 0;
               return (
-                <div key={label} className="bg-gray-800/30 rounded-lg p-3 flex items-center justify-between border border-gray-700/50">
+                <div key={label} className="bg-[#1a1a1a]/30 rounded-lg p-3 flex items-center justify-between border border-white/[0.06]">
                   <div>
                     <p className="text-xs text-gray-400">{label}</p>
                     <p className="text-sm font-semibold text-white">
@@ -496,25 +496,25 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card title="Engagement Stats">
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gray-800/30 rounded-lg p-3">
-              <p className="text-2xl font-bold text-purple-400">
+            <div className="bg-[#1a1a1a]/30 rounded-lg p-3">
+              <p className="text-2xl font-bold text-rose-400">
                 {engagementStats.rate}%
               </p>
               <p className="text-xs text-gray-400">Engagement Rate</p>
             </div>
-            <div className="bg-gray-800/30 rounded-lg p-3">
+            <div className="bg-[#1a1a1a]/30 rounded-lg p-3">
               <p className="text-2xl font-bold text-pink-400">
                 {engagementStats.avgLikes.toLocaleString()}
               </p>
               <p className="text-xs text-gray-400">Avg Likes</p>
             </div>
-            <div className="bg-gray-800/30 rounded-lg p-3">
+            <div className="bg-[#1a1a1a]/30 rounded-lg p-3">
               <p className="text-2xl font-bold text-orange-400">
                 {engagementStats.avgComments.toLocaleString()}
               </p>
               <p className="text-xs text-gray-400">Avg Comments</p>
             </div>
-            <div className="bg-gray-800/30 rounded-lg p-3">
+            <div className="bg-[#1a1a1a]/30 rounded-lg p-3">
               <p className="text-2xl font-bold text-blue-400">
                 {engagementStats.estimatedReach.toLocaleString()}
               </p>
@@ -555,7 +555,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
                     {report.nlp.themes.map((theme, i) => (
                       <span
                         key={i}
-                        className="px-3 py-1.5 bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-full text-sm font-medium"
+                        className="px-3 py-1.5 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-full text-sm font-medium"
                       >
                         {theme}
                       </span>
@@ -640,11 +640,11 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
 
       {/* Bio Rewrite */}
       <Card title="Bio Rewrite Suggestion">
-        <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-lg p-4">
+        <div className="bg-gradient-to-r from-rose-500/10 to-rose-400/10 border border-rose-500/20 rounded-lg p-4">
           <p className="text-white font-medium">{report.bioRewrite}</p>
           <button
             onClick={() => navigator.clipboard.writeText(report.bioRewrite)}
-            className="mt-3 text-xs text-purple-400 hover:text-purple-300 transition-colors pdf-hide"
+            className="mt-3 text-xs text-rose-400 hover:text-rose-300 transition-colors pdf-hide"
           >
             Copy to clipboard
           </button>
@@ -657,9 +657,9 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
           {report.contentPillars.map((pillar, i) => (
             <div
               key={i}
-              className="bg-gray-800/30 rounded-lg p-4 border border-gray-700/50"
+              className="bg-[#1a1a1a]/30 rounded-lg p-4 border border-white/[0.06]"
             >
-              <h4 className="font-semibold text-purple-300 mb-1">
+              <h4 className="font-semibold text-rose-300 mb-1">
                 {pillar.name}
               </h4>
               <p className="text-xs text-gray-400 mb-3">
@@ -693,7 +693,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
                 </p>
               </div>
               <svg
-                className="w-5 h-5 text-purple-400"
+                className="w-5 h-5 text-rose-400"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -707,7 +707,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
               </svg>
               <div className="text-right">
                 <p className="text-xs text-gray-400">Recommended</p>
-                <p className="text-sm text-purple-300 font-medium">
+                <p className="text-sm text-rose-300 font-medium">
                   {report.postingStrategy.recommendedFrequency}
                 </p>
               </div>
@@ -727,10 +727,10 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
               {report.postingStrategy.bestTimes.map((t, i) => (
                 <div
                   key={i}
-                  className="flex justify-between text-sm bg-gray-800/30 px-3 py-1.5 rounded"
+                  className="flex justify-between text-sm bg-[#1a1a1a]/30 px-3 py-1.5 rounded"
                 >
                   <span className="text-gray-300">{t.day}</span>
-                  <span className="text-purple-300 font-medium">{t.time}</span>
+                  <span className="text-rose-300 font-medium">{t.time}</span>
                 </div>
               ))}
             </div>
@@ -743,7 +743,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {(
             [
-              ["Niche", report.hashtags.niche, "purple"],
+              ["Niche", report.hashtags.niche, "rose"],
               ["Mid-Tier", report.hashtags.midTier, "pink"],
               ["Broad", report.hashtags.broad, "orange"],
             ] as const
@@ -780,7 +780,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
               .join(" ");
             navigator.clipboard.writeText(all);
           }}
-          className="mt-4 text-xs text-purple-400 hover:text-purple-300 transition-colors pdf-hide"
+          className="mt-4 text-xs text-rose-400 hover:text-rose-300 transition-colors pdf-hide"
         >
           Copy all hashtags
         </button>
@@ -792,10 +792,10 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
           {report.roadmap.map((phase, i) => (
             <div
               key={i}
-              className="relative bg-gray-800/30 rounded-lg p-4 border border-gray-700/50"
+              className="relative bg-[#1a1a1a]/30 rounded-lg p-4 border border-white/[0.06]"
             >
               <div className="flex items-center gap-2 mb-3">
-                <span className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-xs font-bold">
+                <span className="w-8 h-8 rounded-full bg-gradient-to-r from-rose-500 to-rose-400 flex items-center justify-center text-xs font-bold">
                   {i + 1}
                 </span>
                 <div>
@@ -823,8 +823,8 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
                   ))}
                 </ul>
               </div>
-              <div className="bg-purple-500/10 rounded p-2 mt-auto">
-                <p className="text-xs text-purple-300">
+              <div className="bg-rose-500/10 rounded p-2 mt-auto">
+                <p className="text-xs text-rose-300">
                   {phase.expectedOutcome}
                 </p>
               </div>
@@ -864,10 +864,10 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
           {report.actionItems.map((item) => (
             <div
               key={item.rank}
-              className="bg-gray-800/30 rounded-lg p-5 border border-gray-700/50"
+              className="bg-[#1a1a1a]/30 rounded-lg p-5 border border-white/[0.06]"
             >
               <div className="flex items-start gap-4">
-                <span className="w-9 h-9 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-sm font-bold shrink-0">
+                <span className="w-9 h-9 rounded-full bg-gradient-to-r from-rose-500 to-rose-400 flex items-center justify-center text-sm font-bold shrink-0">
                   {item.rank}
                 </span>
                 <div className="flex-1 min-w-0">
@@ -893,10 +893,10 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
                   {/* Step-by-step instructions */}
                   {item.steps && item.steps.length > 0 && (
                     <div className="bg-black/20 rounded-lg p-3 space-y-2">
-                      <p className="text-xs text-purple-400 font-semibold uppercase tracking-wide">How to do it:</p>
+                      <p className="text-xs text-rose-400 font-semibold uppercase tracking-wide">How to do it:</p>
                       {item.steps.map((step, j) => (
                         <div key={j} className="flex items-start gap-2">
-                          <span className="text-purple-400 text-xs font-bold mt-0.5 shrink-0">
+                          <span className="text-rose-400 text-xs font-bold mt-0.5 shrink-0">
                             {j + 1}.
                           </span>
                           <p className="text-xs text-gray-300">{step}</p>
@@ -904,7 +904,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
                       ))}
                     </div>
                   )}
-                  <span className="text-xs text-purple-400/60 mt-2 inline-block">
+                  <span className="text-xs text-rose-400/60 mt-2 inline-block">
                     {item.category}
                   </span>
                 </div>
@@ -921,10 +921,10 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
             {report.contentCalendar.map((day, i) => (
               <div
                 key={i}
-                className="bg-gray-800/30 rounded-lg p-4 border border-gray-700/50"
+                className="bg-[#1a1a1a]/30 rounded-lg p-4 border border-white/[0.06]"
               >
                 <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
-                  <span className="px-2.5 py-1 bg-purple-500/20 text-purple-300 rounded text-xs font-semibold min-w-[70px] sm:min-w-[80px] text-center">
+                  <span className="px-2.5 py-1 bg-rose-500/20 text-rose-300 rounded text-xs font-semibold min-w-[70px] sm:min-w-[80px] text-center">
                     {day.day}
                   </span>
                   <Badge text={day.contentType} variant="default" />
@@ -957,7 +957,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
                 .join("\n\n");
               navigator.clipboard.writeText(text);
             }}
-            className="mt-4 text-xs text-purple-400 hover:text-purple-300 transition-colors pdf-hide"
+            className="mt-4 text-xs text-rose-400 hover:text-rose-300 transition-colors pdf-hide"
           >
             Copy entire calendar
           </button>
@@ -971,12 +971,12 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
             {report.competitorInsights.map((insight, i) => (
               <div
                 key={i}
-                className="bg-gray-800/30 rounded-lg p-4 border border-gray-700/50"
+                className="bg-[#1a1a1a]/30 rounded-lg p-4 border border-white/[0.06]"
               >
-                <h4 className="font-semibold text-purple-300 text-sm mb-1">{insight.tactic}</h4>
+                <h4 className="font-semibold text-rose-300 text-sm mb-1">{insight.tactic}</h4>
                 <p className="text-xs text-gray-400 mb-3">{insight.description}</p>
-                <div className="bg-purple-500/10 rounded p-2.5">
-                  <p className="text-xs text-purple-400 font-semibold mb-1">How to apply:</p>
+                <div className="bg-rose-500/10 rounded p-2.5">
+                  <p className="text-xs text-rose-400 font-semibold mb-1">How to apply:</p>
                   <p className="text-xs text-gray-300">{insight.howToApply}</p>
                 </div>
               </div>
@@ -1024,7 +1024,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
           </div>
           <div>
             {report.monetisation.nextMilestone && (
-              <div className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-lg p-3 mb-4">
+              <div className="bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20 rounded-lg p-3 mb-4">
                 <p className="text-xs text-yellow-400 font-semibold mb-1">Next Milestone</p>
                 <p className="text-sm text-gray-200">{report.monetisation.nextMilestone}</p>
               </div>
@@ -1034,7 +1034,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
               {report.monetisation.opportunities.map((o, i) => (
                 <div
                   key={i}
-                  className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-lg p-3"
+                  className="bg-gradient-to-r from-rose-500/10 to-rose-400/10 border border-rose-500/20 rounded-lg p-3"
                 >
                   <p className="text-sm text-gray-200">{o}</p>
                 </div>
@@ -1046,20 +1046,20 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
 
       {/* Footer */}
       <div className="text-center py-8 pdf-hide">
-        <p className="text-gray-500 text-sm">
+        <p className="text-[#8a8580] text-sm">
           Generated by SocialLens &middot; Powered by Claude AI
         </p>
         <div className="flex justify-center gap-3 mt-4">
           <button
             onClick={handleDownloadPdf}
             disabled={pdfLoading}
-            className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg text-white font-semibold hover:from-purple-500 hover:to-pink-500 transition-all disabled:opacity-50"
+            className="px-6 py-2.5 bg-gradient-to-r from-rose-600 to-rose-500 rounded-lg text-white font-semibold hover:from-rose-500 hover:to-rose-400 transition-all disabled:opacity-50"
           >
             {pdfLoading ? "Generating..." : "Download PDF"}
           </button>
           <button
             onClick={onNewAnalysis}
-            className="px-6 py-2.5 border border-gray-700 rounded-lg text-gray-300 hover:bg-gray-800 transition-colors"
+            className="px-6 py-2.5 border border-white/[0.06] rounded-lg text-gray-300 hover:bg-[#1a1a1a] transition-colors"
           >
             Analyze Another Profile
           </button>

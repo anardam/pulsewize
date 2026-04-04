@@ -82,7 +82,7 @@ export default function LandingPage() {
               {PLATFORMS.map(({ icon: Icon, label }) => (
                 <div
                   key={label}
-                  className="h-5 w-5 rounded-full bg-[#1a1a1a] border border-white/[0.08] flex items-center justify-center"
+                  className="h-5 w-5 rounded-full bg-[#1a1a1a] border border-white/[0.06] flex items-center justify-center"
                 >
                   <Icon size={10} className="text-[#8a8580]" />
                 </div>
@@ -129,7 +129,7 @@ export default function LandingPage() {
             </Link>
             <Link
               href="#features"
-              className="inline-flex items-center px-5 py-2.5 rounded-lg text-sm font-medium text-[#8a8580] hover:text-[#e8e4df] border border-white/[0.08] hover:border-white/[0.14] hover:bg-white/[0.03] transition-all duration-300"
+              className="inline-flex items-center px-5 py-2.5 rounded-lg text-sm font-medium text-[#8a8580] hover:text-[#e8e4df] border border-white/[0.06] hover:border-white/[0.14] hover:bg-white/[0.03] transition-all duration-300"
             >
               How it works
             </Link>

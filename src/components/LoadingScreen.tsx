@@ -24,12 +24,12 @@ export default function LoadingScreen() {
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-[#0a0a0f]/95 backdrop-blur-sm z-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-[#0d0d0d]/95 backdrop-blur-sm z-50 flex items-center justify-center">
       <div className="max-w-md w-full mx-4">
         {/* Animated gradient orb */}
         <div className="flex justify-center mb-8">
-          <div className="w-24 h-24 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 animate-pulse-slow opacity-80 blur-sm" />
-          <div className="w-24 h-24 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 animate-pulse absolute opacity-60" />
+          <div className="w-24 h-24 rounded-full bg-gradient-to-r from-rose-500 via-rose-400 to-amber-500 animate-pulse-slow opacity-80 blur-sm" />
+          <div className="w-24 h-24 rounded-full bg-gradient-to-r from-rose-500 via-rose-400 to-amber-500 animate-pulse absolute opacity-60" />
         </div>
 
         <h2 className="text-2xl font-bold text-center mb-2 gradient-text">
@@ -46,9 +46,9 @@ export default function LoadingScreen() {
               key={index}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-500 ${
                 index < currentStep
-                  ? "bg-purple-500/10 text-purple-300"
+                  ? "bg-rose-500/10 text-rose-300"
                   : index === currentStep
-                    ? "bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white"
+                    ? "bg-gradient-to-r from-rose-500/20 to-rose-400/20 text-white"
                     : "text-gray-600"
               }`}
             >
@@ -68,7 +68,7 @@ export default function LoadingScreen() {
                     />
                   </svg>
                 ) : index === currentStep ? (
-                  <div className="w-5 h-5 border-2 border-purple-400 border-t-transparent rounded-full animate-spin mx-auto" />
+                  <div className="w-5 h-5 border-2 border-rose-400 border-t-transparent rounded-full animate-spin mx-auto" />
                 ) : (
                   <span className="opacity-40">{step.icon}</span>
                 )}
@@ -79,9 +79,9 @@ export default function LoadingScreen() {
         </div>
 
         {/* Progress bar */}
-        <div className="mt-8 h-1.5 bg-gray-800 rounded-full overflow-hidden">
+        <div className="mt-8 h-1.5 bg-[#1a1a1a] rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 rounded-full transition-all duration-1000 ease-out"
+            className="h-full bg-gradient-to-r from-rose-500 via-rose-400 to-amber-500 rounded-full transition-all duration-1000 ease-out"
             style={{
               width: `${((currentStep + 1) / STEPS.length) * 100}%`,
             }}

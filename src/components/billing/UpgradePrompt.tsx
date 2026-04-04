@@ -51,19 +51,19 @@ export function UpgradePrompt() {
       {/* checkout.js loaded via next/script — App Router safe, deduplicated */}
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
 
-      <div className="rounded-xl border border-violet-500/30 bg-violet-500/5 p-6 text-center">
-        <div className="mb-1 text-sm font-medium text-violet-400">
+      <div className="rounded-xl border border-rose-500/30 bg-rose-500/5 p-6 text-center">
+        <div className="mb-1 text-sm font-medium text-rose-400">
           You&apos;ve used all 3 free analyses this month
         </div>
-        <h3 className="text-lg font-semibold text-[#ededed]">
+        <h3 className="text-lg font-semibold text-[#e8e4df]">
           Unlock unlimited analyses
         </h3>
-        <p className="mt-1.5 text-sm text-muted-foreground">
+        <p className="mt-1.5 text-sm text-[#8a8580]">
           Upgrade to Pro for $19.99/month — unlimited analyses across all 6
           platforms.
         </p>
 
-        <ul className="mt-4 space-y-1 text-sm text-muted-foreground">
+        <ul className="mt-4 space-y-1 text-sm text-[#8a8580]">
           <li>Unlimited analyses every month</li>
           <li>All 6 platforms supported</li>
           <li>Full AI-powered insights</li>
@@ -75,12 +75,12 @@ export function UpgradePrompt() {
         <button
           onClick={handleUpgrade}
           disabled={isLoading}
-          className="mt-4 inline-flex items-center gap-2 rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-violet-700 disabled:opacity-60 transition-colors"
+          className="mt-4 inline-flex items-center gap-2 rounded-lg bg-rose-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-60 transition-colors"
         >
           {isLoading ? "Opening checkout..." : "Upgrade to Pro"}
         </button>
 
-        <p className="mt-3 text-xs text-muted-foreground">
+        <p className="mt-3 text-xs text-[#8a8580]">
           Cancel anytime from Settings. Powered by Razorpay.
         </p>
       </div>

@@ -35,8 +35,8 @@ export default function HealthError({ health }: Props) {
 
         <div className="space-y-4">
           {!health.cliInstalled && (
-            <div className="bg-gray-800/50 rounded-lg p-4">
-              <h3 className="text-sm font-semibold text-purple-300 mb-2">
+            <div className="bg-[#141414] rounded-lg p-4">
+              <h3 className="text-sm font-semibold text-rose-300 mb-2">
                 Step 1: Install Claude Code CLI
               </h3>
               <code className="block bg-black/50 px-3 py-2 rounded text-sm text-green-400 font-mono">
@@ -46,22 +46,22 @@ export default function HealthError({ health }: Props) {
           )}
 
           {!health.cliAuthenticated && (
-            <div className="bg-gray-800/50 rounded-lg p-4">
-              <h3 className="text-sm font-semibold text-purple-300 mb-2">
+            <div className="bg-[#141414] rounded-lg p-4">
+              <h3 className="text-sm font-semibold text-rose-300 mb-2">
                 {health.cliInstalled ? "Step 1" : "Step 2"}: Log in to Claude
               </h3>
               <code className="block bg-black/50 px-3 py-2 rounded text-sm text-green-400 font-mono">
                 claude
               </code>
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-xs text-[#8a8580] mt-2">
                 Run this command in your terminal and follow the authentication
                 prompts.
               </p>
             </div>
           )}
 
-          <div className="bg-gray-800/50 rounded-lg p-4">
-            <h3 className="text-sm font-semibold text-purple-300 mb-2">
+          <div className="bg-[#141414] rounded-lg p-4">
+            <h3 className="text-sm font-semibold text-rose-300 mb-2">
               Then restart SocialLens
             </h3>
             <code className="block bg-black/50 px-3 py-2 rounded text-sm text-green-400 font-mono">
@@ -72,7 +72,7 @@ export default function HealthError({ health }: Props) {
 
         <button
           onClick={() => window.location.reload()}
-          className="w-full mt-6 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg text-white font-semibold hover:from-purple-500 hover:to-pink-500 transition-all"
+          className="w-full mt-6 py-2.5 bg-gradient-to-r from-rose-600 to-rose-500 rounded-lg text-white font-semibold hover:from-rose-500 hover:to-rose-400 transition-all"
         >
           Retry Connection
         </button>
