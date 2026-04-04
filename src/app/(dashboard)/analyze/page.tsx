@@ -4,12 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Camera,
-  Play,
-  AtSign,
-  Briefcase,
-  Users,
-  Music2,
   ArrowLeft,
   Search,
   Bookmark,
@@ -17,6 +11,14 @@ import {
   Sparkles,
   RotateCcw,
 } from "lucide-react";
+import {
+  FaInstagram,
+  FaYoutube,
+  FaXTwitter,
+  FaTiktok,
+  FaLinkedinIn,
+  FaFacebookF,
+} from "react-icons/fa6";
 import LoadingScreen from "@/components/LoadingScreen";
 import ManualEntryForm from "@/components/ManualEntryForm";
 import ReportDashboard from "@/components/ReportDashboard";
@@ -43,12 +45,12 @@ interface SavedProfile {
 }
 
 const PLATFORMS = [
-  { id: "instagram", label: "Instagram", icon: Camera, color: "#E1306C" },
-  { id: "youtube", label: "YouTube", icon: Play, color: "#FF0000" },
-  { id: "twitter", label: "Twitter/X", icon: AtSign, color: "#1DA1F2" },
-  { id: "tiktok", label: "TikTok", icon: Music2, color: "#00f2ea" },
-  { id: "linkedin", label: "LinkedIn", icon: Briefcase, color: "#0A66C2" },
-  { id: "facebook", label: "Facebook", icon: Users, color: "#1877F2" },
+  { id: "instagram", label: "Instagram", icon: FaInstagram, color: "#E1306C" },
+  { id: "youtube", label: "YouTube", icon: FaYoutube, color: "#FF0000" },
+  { id: "twitter", label: "Twitter/X", icon: FaXTwitter, color: "#1DA1F2" },
+  { id: "tiktok", label: "TikTok", icon: FaTiktok, color: "#00f2ea" },
+  { id: "linkedin", label: "LinkedIn", icon: FaLinkedinIn, color: "#0A66C2" },
+  { id: "facebook", label: "Facebook", icon: FaFacebookF, color: "#1877F2" },
 ];
 
 const fadeUp = {

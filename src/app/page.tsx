@@ -4,21 +4,23 @@ import {
   Sparkles,
   TrendingUp,
   BarChart3,
-  Camera,
-  Play,
-  AtSign,
-  Briefcase,
-  Users,
   ArrowRight,
   Check,
 } from "lucide-react";
+import {
+  FaInstagram,
+  FaYoutube,
+  FaXTwitter,
+  FaLinkedinIn,
+  FaFacebookF,
+} from "react-icons/fa6";
 
 const PLATFORMS = [
-  { icon: Camera, label: "Instagram" },
-  { icon: Play, label: "YouTube" },
-  { icon: AtSign, label: "Twitter/X" },
-  { icon: Briefcase, label: "LinkedIn" },
-  { icon: Users, label: "Facebook" },
+  { icon: FaInstagram, label: "Instagram" },
+  { icon: FaYoutube, label: "YouTube" },
+  { icon: FaXTwitter, label: "Twitter/X" },
+  { icon: FaLinkedinIn, label: "LinkedIn" },
+  { icon: FaFacebookF, label: "Facebook" },
 ];
 
 const FEATURES = [
