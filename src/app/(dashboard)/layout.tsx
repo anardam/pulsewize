@@ -1,5 +1,4 @@
 import { TopNav } from "@/components/nav/TopNav";
-import { QuickActions } from "@/components/nav/QuickActions";
 
 export default function DashboardLayout({
   children,
@@ -9,12 +8,9 @@ export default function DashboardLayout({
   return (
     <>
       <TopNav />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        <QuickActions />
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
         {children}
       </div>
-      {/* Spacer for mobile bottom nav */}
-      <div className="sm:hidden h-20" />
     </>
   );
 }

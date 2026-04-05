@@ -2,7 +2,7 @@ import { AuthForm } from "@/components/auth/AuthForm";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Get started — SocialLens" };
+export const metadata: Metadata = { title: "Get started — Pulsewize" };
 
 export default function SignupPage() {
   return (
@@ -13,7 +13,7 @@ export default function SignupPage() {
           <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center">
             <span className="text-[11px] font-bold text-white">SL</span>
           </div>
-          <span className="text-sm font-semibold text-[#e8e4df]">SocialLens</span>
+          <span className="text-sm font-semibold text-[#e8e4df]">Pulsewize</span>
         </Link>
 
         {/* Header */}

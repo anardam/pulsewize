@@ -1,8 +1,9 @@
-import Anthropic from "@anthropic-ai/sdk";
-import { InstagramProfile, ManualProfileInput, AnalysisReport } from "./types";
-import { NlpResult } from "./nlp";
-import { TrendResult } from "./trends";
+import { createOpenRouterClient } from "@/lib/ai/openrouter-client";
+import { CLAUDE_SYNTHESIS_MODEL, SYNTHESIS_MAX_TOKENS } from "@/lib/ai/models";
 import { buildAnalysisPrompt } from "./prompt";
+import type { InstagramProfile, ManualProfileInput, AnalysisReport } from "./types";
+import type { NlpResult } from "./nlp";
+import type { TrendResult } from "./trends";
 
 export async function analyzeWithApi(
   profileData: InstagramProfile | ManualProfileInput,
@@ -12,31 +13,19 @@ export async function analyzeWithApi(
   const prompt = buildAnalysisPrompt(profileData, nlpResult, trendResult);
 
   try {
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (!apiKey) {
-      return { success: false, error: "Server API key not configured" };
-    }
-    const client = new Anthropic({ apiKey });
-
-    const message = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 8192,
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
+    const client = createOpenRouterClient();
+    const completion = await client.chat.completions.create({
+      model: CLAUDE_SYNTHESIS_MODEL,
+      max_tokens: SYNTHESIS_MAX_TOKENS,
+      messages: [{ role: "user", content: prompt }],
     });
 
-    const textBlock = message.content.find((b) => b.type === "text");
-    if (!textBlock || textBlock.type !== "text") {
-      return { success: false, error: "No text response from Claude API" };
+    const text = completion.choices[0]?.message?.content ?? "";
+    if (!text) {
+      return { success: false, error: "No text response from AI provider" };
     }
 
-    let jsonStr = textBlock.text.trim();
-
-    // Strip markdown code fences if present
+    let jsonStr = text.trim();
     const jsonMatch = jsonStr.match(/```(?:json)?\s*([\s\S]*?)```/);
     if (jsonMatch) {
       jsonStr = jsonMatch[1].trim();
@@ -55,16 +44,22 @@ export async function analyzeWithApi(
     return { success: true, report };
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    if (message.includes("401") || message.includes("authentication")) {
+    if (message.includes("401") || message.toLowerCase().includes("authentication")) {
       return {
         success: false,
-        error: "Invalid API key. Please check your Anthropic API key and try again.",
+        error: "Invalid OpenRouter API key. Please check your configuration and try again.",
       };
     }
     if (message.includes("429")) {
       return {
         success: false,
-        error: "API rate limit exceeded. Please wait a moment and try again.",
+        error: "Provider rate limit exceeded. Please wait a moment and try again.",
+      };
+    }
+    if (message.includes("OPENROUTER_API_KEY not configured")) {
+      return {
+        success: false,
+        error: "OPENROUTER_API_KEY is not configured on the server.",
       };
     }
     if (message.includes("JSON")) {
@@ -73,6 +68,6 @@ export async function analyzeWithApi(
         error: "Failed to parse analysis results. Please try again.",
       };
     }
-    return { success: false, error: `API analysis failed: ${message}` };
+    return { success: false, error: `AI analysis failed: ${message}` };
   }
 }

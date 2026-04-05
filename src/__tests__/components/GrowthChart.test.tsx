@@ -28,13 +28,13 @@ describe("GrowthChart", () => {
   });
 
   it("shows empty state text when data has fewer than 2 points", () => {
-    expect(source).toContain("Analyze the same profile again to track growth");
+    expect(source).toContain("Analyze the same profile again and we&apos;ll start mapping");
     expect(source).toContain("data.length < 2");
   });
 
-  it("uses ResponsiveContainer with 100% width and height 220", () => {
+  it("uses ResponsiveContainer with 100% width and height 236", () => {
     expect(source).toContain('width="100%"');
-    expect(source).toContain("height={220}");
+    expect(source).toContain("height={236}");
   });
 
   it("applies purple gradient to engagement area", () => {

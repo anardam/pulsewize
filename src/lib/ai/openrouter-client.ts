@@ -9,8 +9,8 @@ export function createOpenRouterClient(): OpenAI {
     baseURL: "https://openrouter.ai/api/v1",
     apiKey,
     defaultHeaders: {
-      "HTTP-Referer": "https://sociallens.com",
-      "X-Title": "SocialLens",
+      "HTTP-Referer": process.env.NEXT_PUBLIC_SITE_URL || "https://pulsewize.app",
+      "X-Title": "Pulsewize",
     },
   });
 }

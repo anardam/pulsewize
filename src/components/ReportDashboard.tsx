@@ -29,9 +29,9 @@ function ScoreRing({
   const offset = circumference - (score / 100) * circumference;
   const color =
     score >= 75
-      ? "#a855f7"
+      ? "#e1467c"
       : score >= 50
-        ? "#f59e0b"
+        ? "#d4a574"
         : "#ef4444";
 
   return (
@@ -205,6 +205,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
   const [pdfLoading, setPdfLoading] = useState(false);
   const [previousReport, setPreviousReport] = useState<StoredReport | null>(null);
   const [activeTab, setActiveTab] = useState<DashboardTab>("overview");
+  const displayUsername = report.username.replace(/^@+/, "");
 
   useEffect(() => {
     const prev = saveAndGetPrevious(report);
@@ -225,7 +226,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
       await html2pdf()
         .set({
           margin: [10, 10, 10, 10],
-          filename: `sociallens-report-${report.username}.pdf`,
+          filename: `pulsewize-report-${displayUsername}.pdf`,
           image: { type: "jpeg", quality: 0.98 },
           html2canvas: {
             scale: 2,
@@ -245,7 +246,53 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
     } finally {
       setPdfLoading(false);
     }
-  }, [report.username]);
+  }, [displayUsername]);
+
+  const hashtagColorMap = {
+    rose: {
+      heading: "text-rose-400",
+      badge:
+        "text-xs px-2 py-1 rounded bg-rose-500/10 text-rose-300 border border-rose-500/20 cursor-pointer hover:bg-rose-500/20 transition-colors",
+    },
+    pink: {
+      heading: "text-pink-400",
+      badge:
+        "text-xs px-2 py-1 rounded bg-pink-500/10 text-pink-300 border border-pink-500/20 cursor-pointer hover:bg-pink-500/20 transition-colors",
+    },
+    orange: {
+      heading: "text-orange-400",
+      badge:
+        "text-xs px-2 py-1 rounded bg-orange-500/10 text-orange-300 border border-orange-500/20 cursor-pointer hover:bg-orange-500/20 transition-colors",
+    },
+  } as const;
+
+  const postingStrategy = report.postingStrategy ?? (
+    report.uploadStrategy
+      ? {
+          currentFrequency: report.uploadStrategy.currentFrequency,
+          recommendedFrequency: report.uploadStrategy.recommendedFrequency,
+          bestTimes: report.uploadStrategy.bestTimes,
+          bestFormats: report.uploadStrategy.videoFormats,
+        }
+      : null
+  );
+
+  const hashtagGroups = report.hashtags
+    ? [
+        ["Niche", Array.isArray(report.hashtags.niche) ? report.hashtags.niche : [], "rose"],
+        ["Mid-Tier", Array.isArray(report.hashtags.midTier) ? report.hashtags.midTier : [], "pink"],
+        ["Broad", Array.isArray(report.hashtags.broad) ? report.hashtags.broad : [], "orange"],
+      ].filter(([, tags]) => tags.length > 0)
+    : [];
+
+  const normalizedCalendar = (report.contentCalendar ?? []).map((day) => ({
+    day: day.day,
+    contentType: day.contentType,
+    headline: day.topic ?? day.titleHook ?? "Planned content",
+    detailLabel: day.caption ? "Caption" : day.openingHook ? "Opening Hook" : "",
+    detailText: day.caption ?? day.openingHook ?? "",
+    hashtags: day.hashtags ?? "",
+  }));
 
   return (
     <div ref={reportRef} className="max-w-6xl mx-auto space-y-6">
@@ -263,7 +310,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
           display: none !important;
         }
         .pdf-export .gradient-text {
-          -webkit-text-fill-color: #7c3aed !important;
+          -webkit-text-fill-color: #e1467c !important;
         }
         .pdf-export .text-gray-300,
         .pdf-export .text-gray-400,
@@ -273,7 +320,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
         }
         .pdf-export .text-rose-300,
         .pdf-export .text-rose-400 {
-          color: #7c3aed !important;
+          color: #e1467c !important;
         }
         .pdf-export .text-pink-300,
         .pdf-export .text-pink-400 {
@@ -318,17 +365,26 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold gradient-text">
-            @{report.username}
+            @{displayUsername}
           </h1>
           <p className="text-gray-400 text-sm mt-1">
             Analyzed {new Date(report.analyzedAt).toLocaleString()}
           </p>
+          {report.sourceType && (
+            <p className="text-xs uppercase tracking-[0.16em] text-[#8a8580] mt-2">
+              {report.sourceType === "official_api"
+                ? "Official account data"
+                : report.sourceType === "manual"
+                  ? "Manual profile input"
+                  : "Public profile estimate"}
+            </p>
+          )}
         </div>
         <div className="flex gap-2 pdf-hide">
           <button
             onClick={handleDownloadPdf}
             disabled={pdfLoading}
-            className="px-3 sm:px-4 py-2 bg-gradient-to-r from-rose-600 to-rose-500 rounded-lg text-white text-sm font-medium hover:from-rose-500 hover:to-rose-400 transition-all disabled:opacity-50"
+            className="px-3 sm:px-4 py-2 rounded-lg border border-white/[0.08] bg-white/[0.04] text-white text-sm font-medium hover:bg-white/[0.08] transition-colors disabled:opacity-50"
           >
             {pdfLoading ? "Generating..." : "Download PDF"}
           </button>
@@ -682,14 +738,15 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
       </Card>
 
       {/* Posting Strategy */}
-      <Card title="Posting Strategy">
+      {postingStrategy && (
+      <Card title={report.uploadStrategy ? "Upload Strategy" : "Posting Strategy"}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <div className="flex justify-between items-center mb-3">
               <div>
                 <p className="text-xs text-gray-400">Current</p>
                 <p className="text-sm text-gray-300">
-                  {report.postingStrategy.currentFrequency}
+                  {postingStrategy.currentFrequency}
                 </p>
               </div>
               <svg
@@ -708,14 +765,16 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
               <div className="text-right">
                 <p className="text-xs text-gray-400">Recommended</p>
                 <p className="text-sm text-rose-300 font-medium">
-                  {report.postingStrategy.recommendedFrequency}
+                  {postingStrategy.recommendedFrequency}
                 </p>
               </div>
             </div>
             <div className="mt-4">
-              <p className="text-xs text-gray-400 mb-2">Best Formats</p>
+              <p className="text-xs text-gray-400 mb-2">
+                {report.uploadStrategy ? "Recommended Formats" : "Best Formats"}
+              </p>
               <div className="flex flex-wrap gap-2">
-                {report.postingStrategy.bestFormats.map((f, i) => (
+                {postingStrategy.bestFormats.map((f, i) => (
                   <Badge key={i} text={f} />
                 ))}
               </div>
@@ -724,7 +783,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
           <div>
             <p className="text-xs text-gray-400 mb-2">Best Times to Post</p>
             <div className="space-y-1.5">
-              {report.postingStrategy.bestTimes.map((t, i) => (
+              {postingStrategy.bestTimes.map((t, i) => (
                 <div
                   key={i}
                   className="flex justify-between text-sm bg-[#1a1a1a]/30 px-3 py-1.5 rounded"
@@ -737,28 +796,63 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
           </div>
         </div>
       </Card>
+      )}
+
+      {/* YouTube SEO */}
+      {report.videoSEO && (
+        <Card title="Video SEO">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-[#1a1a1a]/30 rounded-lg p-4 border border-white/[0.06]">
+              <p className="text-xs text-gray-400 mb-2">Title Formula</p>
+              <p className="text-sm text-gray-200">{report.videoSEO.titleFormula}</p>
+            </div>
+            <div className="bg-[#1a1a1a]/30 rounded-lg p-4 border border-white/[0.06]">
+              <p className="text-xs text-gray-400 mb-2">Description Template</p>
+              <p className="text-sm text-gray-200 whitespace-pre-wrap">{report.videoSEO.descriptionTemplate}</p>
+            </div>
+            <div className="bg-[#1a1a1a]/30 rounded-lg p-4 border border-white/[0.06]">
+              <p className="text-xs text-gray-400 mb-2">Tags Strategy</p>
+              <p className="text-sm text-gray-200 whitespace-pre-wrap">{report.videoSEO.tagsStrategy}</p>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* Thumbnail Strategy */}
+      {report.thumbnailStrategy && (
+        <Card title="Thumbnail Direction">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-[#1a1a1a]/30 rounded-lg p-4 border border-white/[0.06]">
+              <p className="text-xs text-gray-400 mb-2">Style</p>
+              <p className="text-sm text-gray-200">{report.thumbnailStrategy.style}</p>
+            </div>
+            <div className="bg-[#1a1a1a]/30 rounded-lg p-4 border border-white/[0.06]">
+              <p className="text-xs text-gray-400 mb-2">Color Scheme</p>
+              <p className="text-sm text-gray-200">{report.thumbnailStrategy.colorScheme}</p>
+            </div>
+            <div className="bg-[#1a1a1a]/30 rounded-lg p-4 border border-white/[0.06]">
+              <p className="text-xs text-gray-400 mb-2">Text Overlay Rules</p>
+              <p className="text-sm text-gray-200">{report.thumbnailStrategy.textOverlay}</p>
+            </div>
+          </div>
+        </Card>
+      )}
 
       {/* Hashtags */}
+      {hashtagGroups.length > 0 && (
       <Card title="Hashtag Recommendations">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {(
-            [
-              ["Niche", report.hashtags.niche, "rose"],
-              ["Mid-Tier", report.hashtags.midTier, "pink"],
-              ["Broad", report.hashtags.broad, "orange"],
-            ] as const
-          ).map(([label, tags, color]) => (
+          {(hashtagGroups as [string, string[], keyof typeof hashtagColorMap][]).map(([label, tags, color]) => {
+            const styles = hashtagColorMap[color];
+
+            return (
             <div key={label}>
-              <h4
-                className={`text-sm font-semibold mb-2 text-${color}-400`}
-              >
-                {label}
-              </h4>
+              <h4 className={`text-sm font-semibold mb-2 ${styles.heading}`}>{label}</h4>
               <div className="flex flex-wrap gap-1.5">
                 {tags.map((tag, i) => (
                   <span
                     key={i}
-                    className={`text-xs px-2 py-1 rounded bg-${color}-500/10 text-${color}-300 border border-${color}-500/20 cursor-pointer hover:bg-${color}-500/20 transition-colors`}
+                    className={styles.badge}
                     onClick={() => navigator.clipboard.writeText(tag)}
                     title="Click to copy"
                   >
@@ -767,15 +861,13 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
                 ))}
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
         <button
           onClick={() => {
-            const all = [
-              ...report.hashtags.niche,
-              ...report.hashtags.midTier,
-              ...report.hashtags.broad,
-            ]
+            const all = hashtagGroups
+              .flatMap(([, tags]) => tags)
               .map((t) => (t.startsWith("#") ? t : `#${t}`))
               .join(" ");
             navigator.clipboard.writeText(all);
@@ -785,6 +877,7 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
           Copy all hashtags
         </button>
       </Card>
+      )}
 
       {/* Growth Roadmap */}
       <Card title="Growth Roadmap">
@@ -915,10 +1008,10 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
       </Card>
 
       {/* Content Calendar */}
-      {report.contentCalendar && report.contentCalendar.length > 0 && (
+      {normalizedCalendar.length > 0 && (
         <Card title="7-Day Content Calendar — Ready to Post">
           <div className="space-y-3">
-            {report.contentCalendar.map((day, i) => (
+            {normalizedCalendar.map((day, i) => (
               <div
                 key={i}
                 className="bg-[#1a1a1a]/30 rounded-lg p-4 border border-white/[0.06]"
@@ -928,32 +1021,36 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
                     {day.day}
                   </span>
                   <Badge text={day.contentType} variant="default" />
-                  <span className="text-sm text-white font-medium">{day.topic}</span>
+                  <span className="text-sm text-white font-medium">{day.headline}</span>
                 </div>
                 <div className="sm:ml-[92px] space-y-2">
-                  <div className="bg-black/20 rounded p-2.5">
-                    <p className="text-xs text-gray-400 mb-1">Caption:</p>
-                    <p className="text-sm text-gray-200">{day.caption}</p>
-                  </div>
-                  <div className="flex flex-wrap gap-1">
-                    {day.hashtags.split(/\s+/).map((tag, j) => (
-                      <span
-                        key={j}
-                        className="text-xs text-pink-300 cursor-pointer hover:text-pink-200"
-                        onClick={() => navigator.clipboard.writeText(tag)}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+                  {day.detailText && (
+                    <div className="bg-black/20 rounded p-2.5">
+                      <p className="text-xs text-gray-400 mb-1">{day.detailLabel}:</p>
+                      <p className="text-sm text-gray-200">{day.detailText}</p>
+                    </div>
+                  )}
+                  {day.hashtags && (
+                    <div className="flex flex-wrap gap-1">
+                      {day.hashtags.split(/\s+/).filter(Boolean).map((tag, j) => (
+                        <span
+                          key={j}
+                          className="text-xs text-pink-300 cursor-pointer hover:text-pink-200"
+                          onClick={() => navigator.clipboard.writeText(tag)}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
           </div>
           <button
             onClick={() => {
-              const text = report.contentCalendar
-                .map((d) => `${d.day} (${d.contentType}): ${d.topic}\nCaption: ${d.caption}\n${d.hashtags}`)
+              const text = normalizedCalendar
+                .map((d) => `${d.day} (${d.contentType}): ${d.headline}${d.detailText ? `\n${d.detailLabel}: ${d.detailText}` : ""}${d.hashtags ? `\n${d.hashtags}` : ""}`)
                 .join("\n\n");
               navigator.clipboard.writeText(text);
             }}
@@ -1047,13 +1144,13 @@ export default function ReportDashboard({ report, onNewAnalysis, platform = "ins
       {/* Footer */}
       <div className="text-center py-8 pdf-hide">
         <p className="text-[#8a8580] text-sm">
-          Generated by SocialLens &middot; Powered by Claude AI
+          Generated by Pulsewize &middot; Powered by Claude AI
         </p>
         <div className="flex justify-center gap-3 mt-4">
           <button
             onClick={handleDownloadPdf}
             disabled={pdfLoading}
-            className="px-6 py-2.5 bg-gradient-to-r from-rose-600 to-rose-500 rounded-lg text-white font-semibold hover:from-rose-500 hover:to-rose-400 transition-all disabled:opacity-50"
+            className="px-6 py-2.5 rounded-lg border border-white/[0.08] bg-white/[0.04] text-white font-semibold hover:bg-white/[0.08] transition-colors disabled:opacity-50"
           >
             {pdfLoading ? "Generating..." : "Download PDF"}
           </button>

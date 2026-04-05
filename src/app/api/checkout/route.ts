@@ -1,9 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServer } from "@/lib/supabase/server";
-import { razorpay } from "@/lib/razorpay/client";
+import { getStripe } from "@/lib/stripe/server";
 
-export async function POST(): Promise<NextResponse> {
-  // 1. Auth check
+export async function POST(request: NextRequest): Promise<NextResponse> {
   const supabase = await createSupabaseServer();
   const {
     data: { user },
@@ -16,18 +15,32 @@ export async function POST(): Promise<NextResponse> {
     );
   }
 
-  // 2. Create Razorpay subscription
-  // IMPORTANT: uses subscription_id (not order_id) — subscriptions and orders are separate flows
   try {
-    const subscription = await razorpay.subscriptions.create({
-      plan_id: process.env.RAZORPAY_PLAN_ID!,
-      total_count: 120, // 10 years of monthly cycles
-      quantity: 1,
-      customer_notify: 1, // Razorpay sends payment receipts
-      notes: { user_id: user.id }, // CRITICAL: webhook uses this to find the Supabase user
+    const stripe = getStripe();
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin;
+    const session = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      customer_email: user.email ?? undefined,
+      line_items: [
+        {
+          price: process.env.STRIPE_PRICE_ID!,
+          quantity: 1,
+        },
+      ],
+      allow_promotion_codes: true,
+      metadata: {
+        user_id: user.id,
+      },
+      subscription_data: {
+        metadata: {
+          user_id: user.id,
+        },
+      },
+      success_url: `${siteUrl}/settings?checkout=success`,
+      cancel_url: `${siteUrl}/settings?checkout=cancelled`,
     });
 
-    return NextResponse.json({ success: true, subscriptionId: subscription.id });
+    return NextResponse.json({ success: true, url: session.url });
   } catch (err: unknown) {
     const message =
       err instanceof Error ? err.message : "Failed to create subscription";

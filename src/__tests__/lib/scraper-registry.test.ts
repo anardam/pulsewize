@@ -9,9 +9,10 @@ describe("getScraper", () => {
     expect(typeof scraper?.scrape).toBe("function");
   });
 
-  it("returns undefined for unsupported platform 'twitter'", () => {
+  it("returns a Twitter scraper for supported platform 'twitter'", () => {
     const scraper = getScraper("twitter");
-    expect(scraper).toBeUndefined();
+    expect(scraper).toBeDefined();
+    expect(scraper?.platform).toBe("twitter");
   });
 
   it("is case-insensitive", () => {
@@ -22,8 +23,9 @@ describe("getScraper", () => {
 });
 
 describe("getSupportedPlatforms", () => {
-  it("returns ['instagram'] in Phase 1", () => {
+  it("returns the currently registered platforms", () => {
     const platforms = getSupportedPlatforms();
     expect(platforms).toContain("instagram");
+    expect(platforms).toContain("twitter");
   });
 });

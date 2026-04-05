@@ -19,6 +19,7 @@ interface ReportRow {
   report_type: string;
   analyzed_at: string;
   report_data: AnalysisReport;
+  source_type?: "official_api" | "scraper" | "manual";
 }
 
 interface Props {
@@ -57,6 +58,7 @@ export function ReportCard({ report, index = 0 }: Props) {
   const score = report.report_data?.profileScore?.overall ?? 0;
   const meta = PLATFORM_META[report.platform] ?? PLATFORM_META.instagram;
   const Icon = meta.icon;
+  const displayUsername = report.username.replace(/^@+/, "");
 
   const formattedDate = (() => {
     try {
@@ -95,8 +97,20 @@ export function ReportCard({ report, index = 0 }: Props) {
 
         {/* Username */}
         <p className="text-base font-semibold text-[#e8e4df] group-hover:text-white transition-colors">
-          @{report.username}
+          @{displayUsername}
         </p>
+
+        <div className="mt-3 flex items-center gap-2">
+          {report.source_type && (
+            <span className="rounded-full border border-white/[0.08] px-2 py-0.5 text-[10px] uppercase tracking-[0.14em] text-[#8a8580]">
+              {report.source_type === "official_api"
+                ? "Official"
+                : report.source_type === "manual"
+                  ? "Manual"
+                  : "Public"}
+            </span>
+          )}
+        </div>
 
         {/* Bottom: score + arrow */}
         <div className="flex items-center justify-between mt-4">

@@ -84,10 +84,7 @@ export function ReportFilters({ platform, search, dateFrom, dateTo }: Props) {
         >
           <option value="">All Platforms</option>
           <option value="instagram">Instagram</option>
-          <option value="twitter">Twitter/X</option>
-          <option value="tiktok">TikTok</option>
           <option value="youtube">YouTube</option>
-          <option value="linkedin">LinkedIn</option>
           <option value="facebook">Facebook</option>
         </select>
       </div>

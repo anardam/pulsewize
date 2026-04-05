@@ -64,7 +64,7 @@ export default function ReportDetailPage() {
           <p className="text-[#8a8580] mb-4">{error || "Report not found"}</p>
           <button
             onClick={() => router.push("/reports")}
-            className="px-4 py-2 rounded-lg text-sm font-medium bg-rose-600 hover:bg-rose-500 text-white transition-colors"
+            className="px-4 py-2 rounded-lg text-sm font-medium border border-white/[0.08] bg-white/[0.04] text-white transition-colors hover:bg-white/[0.08]"
           >
             Back to reports
           </button>
@@ -77,7 +77,7 @@ export default function ReportDetailPage() {
     <div className="min-h-screen bg-[#0d0d0d]">
       <ReportDashboard
         report={report}
-        onNewAnalysis={() => router.push("/analyze")}
+        onNewAnalysis={() => router.push("/dashboard#studio")}
         platform={platform}
       />
     </div>

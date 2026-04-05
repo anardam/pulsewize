@@ -72,10 +72,29 @@ export interface PostingStrategy {
   bestFormats: string[];
 }
 
+export interface UploadStrategy {
+  currentFrequency: string;
+  recommendedFrequency: string;
+  bestTimes: { day: string; time: string }[];
+  videoFormats: string[];
+}
+
 export interface HashtagGroup {
   niche: string[];
   midTier: string[];
   broad: string[];
+}
+
+export interface VideoSeoStrategy {
+  titleFormula: string;
+  descriptionTemplate: string;
+  tagsStrategy: string;
+}
+
+export interface ThumbnailStrategy {
+  style: string;
+  colorScheme: string;
+  textOverlay: string;
 }
 
 export interface RoadmapPhase {
@@ -112,9 +131,11 @@ export interface CompetitorInsight {
 export interface ContentCalendarDay {
   day: string;
   contentType: string;
-  topic: string;
-  caption: string;
-  hashtags: string;
+  topic?: string;
+  caption?: string;
+  hashtags?: string;
+  titleHook?: string;
+  openingHook?: string;
 }
 
 export interface MonetisationAssessment {
@@ -152,16 +173,20 @@ export interface AnalysisReport {
   strengthsWeaknesses: StrengthWeakness;
   bioRewrite: string;
   contentPillars: ContentPillar[];
-  postingStrategy: PostingStrategy;
-  hashtags: HashtagGroup;
+  postingStrategy?: PostingStrategy;
+  uploadStrategy?: UploadStrategy;
+  hashtags?: HashtagGroup;
+  videoSEO?: VideoSeoStrategy;
+  thumbnailStrategy?: ThumbnailStrategy;
   roadmap: RoadmapPhase[];
   actionItems: ActionItem[];
   quickWins: QuickWin[];
   competitorInsights: CompetitorInsight[];
-  contentCalendar: ContentCalendarDay[];
+  contentCalendar?: ContentCalendarDay[];
   monetisation: MonetisationAssessment;
   analyzedAt: string;
   username: string;
+  sourceType?: "official_api" | "scraper" | "manual";
   nlp?: NlpData;
   trend?: TrendData;
   multiAgentMeta?: MultiAgentMetadata;

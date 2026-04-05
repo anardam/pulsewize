@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Script from "next/script";
 
 export function UpgradePrompt() {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,29 +14,11 @@ export function UpgradePrompt() {
       const res = await fetch("/api/checkout", { method: "POST" });
       const data = await res.json();
 
-      if (!data.success || !data.subscriptionId) {
+      if (!data.success || !data.url) {
         throw new Error(data.error ?? "Could not initiate checkout");
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const rzp = new (window as any).Razorpay({
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        subscription_id: data.subscriptionId, // NOT order_id
-        name: "SocialLens",
-        description: "Pro Plan — Unlimited Analyses",
-        theme: { color: "#7c3aed" },
-        handler: function () {
-          // Advisory only — D-10: client callback MUST NOT set plan state
-          // Webhook is the source of truth; reload to pick up updated status
-          window.location.reload();
-        },
-        modal: {
-          ondismiss: function () {
-            setIsLoading(false);
-          },
-        },
-      });
-      rzp.open();
+      window.location.href = data.url;
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "Something went wrong";
@@ -47,43 +28,38 @@ export function UpgradePrompt() {
   }
 
   return (
-    <>
-      {/* checkout.js loaded via next/script — App Router safe, deduplicated */}
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
-
-      <div className="rounded-xl border border-rose-500/30 bg-rose-500/5 p-6 text-center">
-        <div className="mb-1 text-sm font-medium text-rose-400">
-          You&apos;ve used all 3 free analyses this month
-        </div>
-        <h3 className="text-lg font-semibold text-[#e8e4df]">
-          Unlock unlimited analyses
-        </h3>
-        <p className="mt-1.5 text-sm text-[#8a8580]">
-          Upgrade to Pro for $19.99/month — unlimited analyses across all 6
-          platforms.
-        </p>
-
-        <ul className="mt-4 space-y-1 text-sm text-[#8a8580]">
-          <li>Unlimited analyses every month</li>
-          <li>All 6 platforms supported</li>
-          <li>Full AI-powered insights</li>
-          <li>Multi-agent reports (coming soon)</li>
-        </ul>
-
-        {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
-
-        <button
-          onClick={handleUpgrade}
-          disabled={isLoading}
-          className="mt-4 inline-flex items-center gap-2 rounded-lg bg-rose-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-60 transition-colors"
-        >
-          {isLoading ? "Opening checkout..." : "Upgrade to Pro"}
-        </button>
-
-        <p className="mt-3 text-xs text-[#8a8580]">
-          Cancel anytime from Settings. Powered by Razorpay.
-        </p>
+    <div className="rounded-xl border border-rose-500/30 bg-rose-500/5 p-6 text-center">
+      <div className="mb-1 text-sm font-medium text-rose-400">
+        You&apos;ve used all 3 free analyses this month
       </div>
-    </>
+      <h3 className="text-lg font-semibold text-[#e8e4df]">
+        Unlock unlimited analyses
+      </h3>
+      <p className="mt-1.5 text-sm text-[#8a8580]">
+        Upgrade to Pro for $19.99/month with promotion codes, recurring billing,
+        and a cleaner subscription flow.
+      </p>
+
+      <ul className="mt-4 space-y-1 text-sm text-[#8a8580]">
+        <li>Unlimited analyses every month</li>
+        <li>Official connected-account data + public reads</li>
+        <li>Promotion codes supported at checkout</li>
+        <li>Cancel anytime from Settings</li>
+      </ul>
+
+      {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
+
+      <button
+        onClick={handleUpgrade}
+        disabled={isLoading}
+        className="mt-4 inline-flex items-center gap-2 rounded-lg bg-rose-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-60 transition-colors"
+      >
+        {isLoading ? "Opening checkout..." : "Upgrade to Pro"}
+      </button>
+
+      <p className="mt-3 text-xs text-[#8a8580]">
+        Powered by Stripe.
+      </p>
+    </div>
   );
 }

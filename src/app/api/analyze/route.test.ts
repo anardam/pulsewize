@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { beforeEach, describe, it, expect, vi } from "vitest";
 
 // This import WILL FAIL until 04-04 wires the route — RED state is correct.
 import { POST } from "@/app/api/analyze/route";
@@ -45,6 +45,10 @@ vi.mock("@/lib/trends", () => ({
 }));
 
 describe("analyze route — Free vs Pro branching (AI-02)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("free user calls analyzeWithApi, not runMultiAgentAnalysis", async () => {
     const { analyzeWithApi } = await import("@/lib/claude-api");
     const { runMultiAgentAnalysis } = await import("@/lib/ai/orchestrator");
@@ -99,7 +103,7 @@ describe("analyze route — 1-hour cache (AI-06)", () => {
         select: vi.fn().mockReturnThis(),
         eq: vi.fn().mockReturnThis(),
         single: vi.fn(() => ({ data: { plan: "free", status: "active" } })),
-        maybeSingle: vi.fn(() => ({ data: { report: cachedReport } })),
+        maybeSingle: vi.fn(() => ({ data: { report_data: cachedReport } })),
         gt: vi.fn().mockReturnThis(),
         order: vi.fn().mockReturnThis(),
         limit: vi.fn().mockReturnThis(),

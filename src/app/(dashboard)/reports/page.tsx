@@ -8,7 +8,7 @@ import { Pagination } from "@/components/reports/Pagination";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Reports — SocialLens" };
+export const metadata: Metadata = { title: "Reports — Pulsewize" };
 
 const PAGE_SIZE = 12;
 
@@ -44,7 +44,7 @@ export default async function ReportsPage({ searchParams }: Props) {
 
   let query = supabase
     .from("reports")
-    .select("id, platform, username, report_type, analyzed_at, report_data", {
+    .select("id, platform, username, report_type, analyzed_at, report_data, source_type", {
       count: "exact",
     })
     .eq("user_id", user.id)
@@ -72,10 +72,10 @@ export default async function ReportsPage({ searchParams }: Props) {
               )}
             </div>
             <Link
-              href="/analyze"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-rose-600 hover:bg-rose-500 text-white transition-all duration-200 hover:shadow-xl hover:shadow-rose-600/20 w-fit"
+              href="/dashboard#studio"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border border-white/[0.08] bg-white/[0.04] text-white transition-colors hover:bg-white/[0.08] w-fit"
             >
-              New analysis
+              New profile read
             </Link>
           </div>
 
@@ -113,10 +113,10 @@ export default async function ReportsPage({ searchParams }: Props) {
                   : "Run your first analysis and your reports will appear here."}
               </p>
               <Link
-                href="/analyze"
-                className="mt-6 inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-rose-600 hover:bg-rose-500 text-white transition-all duration-200 hover:shadow-lg hover:shadow-rose-600/20"
+                href="/dashboard#studio"
+                className="mt-6 inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold border border-white/[0.08] bg-white/[0.04] text-white transition-colors hover:bg-white/[0.08]"
               >
-                Analyze a profile
+                Start with a profile
               </Link>
             </div>
           )}

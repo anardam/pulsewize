@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { TopNav } from "@/components/nav/TopNav";
+import { SITE_DESCRIPTION, SITE_NAME, getSiteUrl } from "@/lib/site";
 import {
   Sparkles,
   TrendingUp,
@@ -10,16 +11,12 @@ import {
 import {
   FaInstagram,
   FaYoutube,
-  FaXTwitter,
-  FaLinkedinIn,
   FaFacebookF,
 } from "react-icons/fa6";
 
 const PLATFORMS = [
   { icon: FaInstagram, label: "Instagram" },
   { icon: FaYoutube, label: "YouTube" },
-  { icon: FaXTwitter, label: "Twitter/X" },
-  { icon: FaLinkedinIn, label: "LinkedIn" },
   { icon: FaFacebookF, label: "Facebook" },
 ];
 
@@ -43,7 +40,7 @@ const FEATURES = [
 
 const FREE_FEATURES = [
   "3 analyses per month",
-  "All 6 platforms",
+  "Instagram, Facebook, YouTube",
   "AI growth strategy",
   "Report export",
 ];
@@ -58,8 +55,44 @@ const PRO_FEATURES = [
 ];
 
 export default function LandingPage() {
+  const siteUrl = getSiteUrl();
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: SITE_NAME,
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    description: SITE_DESCRIPTION,
+    url: siteUrl,
+    offers: [
+      {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+        name: "Free",
+      },
+      {
+        "@type": "Offer",
+        price: "19.99",
+        priceCurrency: "USD",
+        name: "Pro",
+      },
+    ],
+    featureList: [
+      "AI-powered profile analysis",
+      "Growth strategy recommendations",
+      "Competitor comparison",
+      "Content calendar generation",
+      "Hashtag and positioning guidance",
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-[#0d0d0d]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <TopNav />
 
       {/* Hero */}
@@ -89,7 +122,7 @@ export default function LandingPage() {
               ))}
             </div>
             <span className="text-xs text-[#8a8580] font-medium">
-              6 platforms supported
+              3 platforms supported
             </span>
           </div>
 
@@ -240,15 +273,31 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="border-t border-white/[0.06] py-10 px-6">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-md bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center">
-              <span className="text-[8px] font-bold text-white">SL</span>
+        <div className="max-w-5xl mx-auto flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <div className="h-6 w-6 rounded-md bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center">
+                <span className="text-[8px] font-bold text-white">SL</span>
+              </div>
+              <span className="text-sm font-semibold text-[#e8e4df]">Pulsewize</span>
             </div>
-            <span className="text-sm font-semibold text-[#e8e4df]">SocialLens</span>
+            <div className="flex flex-wrap items-center gap-4 text-xs text-[#8a8580]">
+              <Link href="/privacy" className="hover:text-[#e8e4df] transition-colors">
+                Privacy
+              </Link>
+              <Link href="/terms" className="hover:text-[#e8e4df] transition-colors">
+                Terms
+              </Link>
+              <Link href="/refunds" className="hover:text-[#e8e4df] transition-colors">
+                Refunds
+              </Link>
+              <Link href="/contact" className="hover:text-[#e8e4df] transition-colors">
+                Contact
+              </Link>
+            </div>
           </div>
           <span className="text-xs text-[#8a8580]">
-            © {new Date().getFullYear()} SocialLens. All rights reserved.
+            © {new Date().getFullYear()} Pulsewize. All rights reserved.
           </span>
         </div>
       </footer>

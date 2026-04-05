@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServer } from "@/lib/supabase/server";
-import { razorpay } from "@/lib/razorpay/client";
+import { getStripe } from "@/lib/stripe/server";
 
 export async function POST() {
   const supabase = await createSupabaseServer();
@@ -15,10 +15,9 @@ export async function POST() {
     );
   }
 
-  // Fetch the user's Razorpay subscription ID
   const { data: sub } = await supabase
     .from("subscriptions")
-    .select("provider_subscription_id, plan, status")
+    .select("provider, provider_subscription_id, plan, status")
     .eq("user_id", user.id)
     .single();
 
@@ -37,8 +36,14 @@ export async function POST() {
   }
 
   try {
-    // cancel at cycle end = true → user keeps Pro until period end
-    await razorpay.subscriptions.cancel(sub.provider_subscription_id, true);
+    if (sub.provider !== "stripe") {
+      throw new Error("Only Stripe subscriptions can be cancelled from this flow");
+    }
+
+    const stripe = getStripe();
+    await stripe.subscriptions.update(sub.provider_subscription_id, {
+      cancel_at_period_end: true,
+    });
     return NextResponse.json({ success: true });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Cancellation failed";

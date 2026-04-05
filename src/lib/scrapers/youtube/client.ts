@@ -55,6 +55,35 @@ const ScrapeCreatorsYouTubeSchema = z.object({
   thumbnail: z.string().optional(),
 });
 
+function decodeYouTubeText(value: string): string {
+  return value
+    .replace(/\\u0026/g, "&")
+    .replace(/\\u0027/g, "'")
+    .replace(/\\"/g, "\"")
+    .replace(/\\n/g, "\n")
+    .replace(/\\\\/g, "\\");
+}
+
+function parseCountFromText(value: string | undefined): number {
+  if (!value) return 0;
+
+  const match = value.match(/([\d.,]+)\s*([KMB])?/i);
+  if (!match) return 0;
+
+  const base = Number.parseFloat(match[1].replace(/,/g, ""));
+  if (Number.isNaN(base)) return 0;
+
+  const suffix = match[2]?.toUpperCase();
+  if (suffix === "K") return Math.round(base * 1_000);
+  if (suffix === "M") return Math.round(base * 1_000_000);
+  if (suffix === "B") return Math.round(base * 1_000_000_000);
+  return Math.round(base);
+}
+
+function matchFirst(text: string, pattern: RegExp): string | undefined {
+  return pattern.exec(text)?.[1];
+}
+
 function mapChannelToProfile(
   channel: z.infer<typeof YouTubeChannelItemSchema>,
   cleanHandle: string
@@ -213,6 +242,97 @@ async function scrapeYouTubeChannelFallback(
   }
 }
 
+async function scrapeYouTubeChannelWebFallback(handle: string): Promise<ScraperResult> {
+  const cleanHandle = handle.replace(/^@/, "").trim();
+  const candidateUrls = [
+    `https://www.youtube.com/@${encodeURIComponent(cleanHandle)}`,
+    `https://www.youtube.com/c/${encodeURIComponent(cleanHandle)}`,
+    `https://www.youtube.com/user/${encodeURIComponent(cleanHandle)}`,
+  ];
+
+  for (const candidateUrl of candidateUrls) {
+    try {
+      const response = await fetch(candidateUrl, {
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        },
+        signal: AbortSignal.timeout(15000),
+        redirect: "follow",
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        continue;
+      }
+
+      const html = await response.text();
+      if (!html.includes("channelMetadataRenderer") && !html.includes("<title>")) {
+        continue;
+      }
+
+      const title = decodeYouTubeText(
+        matchFirst(html, /"title":"([^"]+)"/) ??
+          matchFirst(html, /<meta property="og:title" content="([^"]+)"/) ??
+          cleanHandle
+      );
+      const description = decodeYouTubeText(
+        matchFirst(html, /"description":"([^"]*)"/) ??
+          matchFirst(html, /<meta name="description" content="([^"]*)"/) ??
+          ""
+      );
+      const profilePicUrl =
+        matchFirst(html, /<meta property="og:image" content="([^"]+)"/) ?? "";
+      const canonicalUrl =
+        matchFirst(html, /<link rel="canonical" href="([^"]+)"/) ?? candidateUrl;
+      const channelId =
+        matchFirst(canonicalUrl, /\/channel\/([^/?"]+)/) ??
+        matchFirst(html, /"externalId":"([^"]+)"/) ??
+        "";
+      const subscriberCountText =
+        matchFirst(html, /([0-9.,KMBkmb]+ subscribers)/) ?? "0 subscribers";
+      const videoCountText = matchFirst(html, /([0-9.,KMBkmb]+ videos)/) ?? "0 videos";
+
+      const viewMatches = Array.from(
+        html.matchAll(/"title":"([^"]+)".{0,220}?"viewCountText":\{"simpleText":"([^"]+)"/g)
+      ).slice(0, 8);
+
+      const recentPosts = viewMatches.map(([, videoTitle, views]) => ({
+        likes: parseCountFromText(views),
+        comments: 0,
+        caption: decodeYouTubeText(videoTitle),
+        isVideo: true,
+      }));
+
+      const profile: YouTubeProfile = {
+        platform: "youtube",
+        username: cleanHandle,
+        fullName: title,
+        biography: description,
+        followersCount: parseCountFromText(subscriberCountText),
+        followingCount: 0,
+        postsCount: parseCountFromText(videoCountText),
+        isVerified: false,
+        profilePicUrl,
+        channelId,
+        subscriberCountText,
+        viewCount: recentPosts.reduce((sum, post) => sum + post.likes, 0),
+        recentPosts,
+        externalUrl: canonicalUrl,
+      };
+
+      return { success: true, profile };
+    } catch {
+      continue;
+    }
+  }
+
+  return {
+    success: false,
+    error: "YouTube channel not found or service unavailable",
+  };
+}
+
 export async function scrapeYouTubeChannel(
   handle: string
 ): Promise<ScraperResult> {
@@ -223,11 +343,22 @@ export async function scrapeYouTubeChannel(
   }
 
   if (primary.error === "QUOTA_EXCEEDED") {
-    return scrapeYouTubeChannelFallback(handle);
+    const fallback = await scrapeYouTubeChannelFallback(handle);
+    if (fallback.success) {
+      return fallback;
+    }
+  }
+
+  const webFallback = await scrapeYouTubeChannelWebFallback(handle);
+  if (webFallback.success) {
+    return webFallback;
   }
 
   return {
     success: false,
-    error: primary.error ?? "YouTube channel not found or service unavailable",
+    error:
+      primary.error === "YOUTUBE_API_KEY not configured"
+        ? "YouTube public lookup is not configured"
+        : primary.error ?? "YouTube channel not found or service unavailable",
   };
 }

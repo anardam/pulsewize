@@ -203,3 +203,75 @@ CREATE INDEX IF NOT EXISTS idx_reports_report_type ON reports(report_type);
 -- Apply avatar_url manually via Supabase Dashboard SQL editor.
 -- =============================================================================
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS avatar_url TEXT;
+
+-- =============================================================================
+-- Connected account foundations
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS connected_accounts (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  platform TEXT NOT NULL CHECK (platform IN ('youtube', 'instagram', 'facebook', 'twitter', 'tiktok')),
+  external_account_id TEXT NOT NULL,
+  username TEXT,
+  display_name TEXT,
+  avatar_url TEXT,
+  scopes TEXT[] NOT NULL DEFAULT '{}',
+  access_token TEXT NOT NULL,
+  refresh_token TEXT,
+  token_expires_at TIMESTAMPTZ,
+  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'expired', 'revoked', 'error')),
+  connected_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  last_synced_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE(platform, external_account_id)
+);
+
+CREATE INDEX IF NOT EXISTS connected_accounts_user_id_idx
+  ON connected_accounts(user_id, platform);
+
+ALTER TABLE connected_accounts ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "connected_accounts: users can read own rows" ON connected_accounts
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "connected_accounts: users can insert own rows" ON connected_accounts
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "connected_accounts: users can update own rows" ON connected_accounts
+  FOR UPDATE USING (auth.uid() = user_id);
+
+CREATE POLICY "connected_accounts: users can delete own rows" ON connected_accounts
+  FOR DELETE USING (auth.uid() = user_id);
+
+CREATE TABLE IF NOT EXISTS account_snapshots (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  connected_account_id UUID NOT NULL REFERENCES connected_accounts(id) ON DELETE CASCADE,
+  fetched_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  profile_data JSONB NOT NULL DEFAULT '{}'::jsonb,
+  metrics_data JSONB NOT NULL DEFAULT '{}'::jsonb
+);
+
+CREATE INDEX IF NOT EXISTS account_snapshots_account_id_idx
+  ON account_snapshots(connected_account_id, fetched_at DESC);
+
+ALTER TABLE account_snapshots ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "account_snapshots: users can read own rows" ON account_snapshots
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM connected_accounts ca
+      WHERE ca.id = connected_account_id
+      AND ca.user_id = auth.uid()
+    )
+  );
+
+ALTER TABLE reports
+  ADD COLUMN IF NOT EXISTS source_type TEXT NOT NULL DEFAULT 'scraper'
+  CHECK (source_type IN ('official_api', 'scraper', 'manual'));
+
+ALTER TABLE reports
+  ADD COLUMN IF NOT EXISTS connected_account_id UUID REFERENCES connected_accounts(id) ON DELETE SET NULL;
+
+CREATE INDEX IF NOT EXISTS reports_connected_account_id_idx
+  ON reports(connected_account_id);

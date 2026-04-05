@@ -1,12 +1,15 @@
 {
-  "name": "sociallens",
+  "name": "pulsewize",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit -p tsconfig.typecheck.json"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.82.0",
@@ -24,11 +27,11 @@
     "next": "16.2.2",
     "openai": "^6.33.0",
     "puppeteer-core": "^24.40.0",
-    "razorpay": "^2.9.6",
     "react": "^19",
     "react-dom": "^19",
     "react-icons": "^5.6.0",
-    "recharts": "^3.8.1"
+    "recharts": "^3.8.1",
+    "stripe": "^22.0.0"
   },
   "devDependencies": {
     "@types/node": "^25",

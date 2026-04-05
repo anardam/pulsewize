@@ -16,5 +16,12 @@ interface Props {
 }
 
 export function GrowthChartWrapper({ data, username }: Props) {
-  return <GrowthChart data={data} username={username} />;
+  const displayUsername = username.replace(/^@+/, "");
+  return (
+    <GrowthChart
+      data={data}
+      title="Momentum snapshot"
+      subtitle={`@${displayUsername}`}
+    />
+  );
 }

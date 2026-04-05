@@ -5,9 +5,86 @@ import { analyzeWithApi } from "@/lib/claude-api";
 import { runMultiAgentAnalysis } from "@/lib/ai/orchestrator";
 import { analyzeCaption } from "@/lib/nlp";
 import { getTrendDirection } from "@/lib/trends";
-import { ManualProfileInput, InstagramProfile } from "@/lib/types";
+import { ManualProfileInput } from "@/lib/types";
+import type { ConnectedAccountRecord } from "@/lib/connections/types";
+import { getConnectionProvider } from "@/lib/connections";
+import type { NormalizedProfile } from "@/lib/scrapers/types";
+import {
+  decryptConnectionToken,
+  encryptConnectionToken,
+} from "@/lib/connection-secrets";
+import { createRequestId, logError, logInfo } from "@/lib/observability";
+
+async function getConnectedProfileData(
+  supabase: Awaited<ReturnType<typeof createSupabaseServer>>,
+  userId: string,
+  connectedAccountId: string
+): Promise<NormalizedProfile> {
+  const { data: account, error } = await supabase
+    .from("connected_accounts")
+    .select("*")
+    .eq("id", connectedAccountId)
+    .eq("user_id", userId)
+    .single();
+
+  if (error || !account) {
+    throw new Error(error?.message ?? "Connected account not found");
+  }
+
+  const typedAccount = account as ConnectedAccountRecord;
+  const provider = getConnectionProvider(typedAccount.platform);
+  let accessToken = decryptConnectionToken(typedAccount.access_token) ?? "";
+  let tokenExpiresAt = typedAccount.token_expires_at;
+  let scopes = typedAccount.scopes;
+  const refreshToken = decryptConnectionToken(typedAccount.refresh_token);
+
+  if (refreshToken) {
+    const refreshed = await provider.refreshAccessToken(refreshToken);
+    accessToken = refreshed.accessToken;
+    tokenExpiresAt = refreshed.expiresAt ?? tokenExpiresAt;
+    scopes = refreshed.scopes.length > 0 ? refreshed.scopes : scopes;
+
+    await supabase
+      .from("connected_accounts")
+      .update({
+        access_token: encryptConnectionToken(accessToken),
+        refresh_token: encryptConnectionToken(refreshed.refreshToken ?? refreshToken),
+        token_expires_at: tokenExpiresAt,
+        scopes,
+        status: "active",
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", typedAccount.id);
+  }
+
+  const snapshot = await provider.fetchSnapshot(accessToken);
+  const now = new Date().toISOString();
+
+  await supabase.from("account_snapshots").insert({
+    connected_account_id: typedAccount.id,
+    fetched_at: now,
+    profile_data: snapshot.profileData,
+    metrics_data: snapshot.metricsData,
+  });
+
+  await supabase
+    .from("connected_accounts")
+    .update({
+      username: snapshot.normalizedProfile.username,
+      display_name: snapshot.normalizedProfile.fullName,
+      avatar_url: snapshot.normalizedProfile.profilePicUrl,
+      last_synced_at: now,
+      status: "active",
+      updated_at: now,
+    })
+    .eq("id", typedAccount.id);
+
+  return snapshot.normalizedProfile;
+}
 
 export async function POST(request: NextRequest) {
+  const requestId = createRequestId();
+  const usageLimitsDisabled = process.env.NEXT_PUBLIC_DISABLE_USAGE_LIMITS === "true";
   // 1. Auth check — require Supabase session
   const supabase = await createSupabaseServer();
   const {
@@ -15,6 +92,10 @@ export async function POST(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   if (!user) {
+    logInfo("analysis_unauthorized", {
+      requestId,
+      route: "analyze",
+    });
     return NextResponse.json(
       { success: false, error: "Authentication required" },
       { status: 401 }
@@ -34,10 +115,8 @@ export async function POST(request: NextRequest) {
       subData?.status === "authenticated" ||
       subData?.status === "halted"); // halted: keep Pro access (payment grace period)
 
-  const usageLimit = isPro ? 999999 : 3;
-
   // 2b. Check usage limit (don't increment yet — only count on success)
-  if (!isPro) {
+  if (!isPro && !usageLimitsDisabled) {
     const billingMonth = new Date().toISOString().slice(0, 7) + "-01";
     const { data: usageRow } = await supabase
       .from("usage")
@@ -65,8 +144,24 @@ export async function POST(request: NextRequest) {
     const bodyPeek = await request.clone().json().catch(() => ({}));
     const cachedPlatform = (bodyPeek as { platform?: string }).platform ?? "instagram";
     const cachedUsername = (bodyPeek as { username?: string }).username?.toLowerCase();
+    const cachedConnectedAccountId = (bodyPeek as { connectedAccountId?: string }).connectedAccountId;
 
-    if (cachedUsername) {
+    if (cachedConnectedAccountId) {
+      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+      const { data: cached } = await supabase
+        .from("reports")
+        .select("report_data")
+        .eq("connected_account_id", cachedConnectedAccountId)
+        .eq("report_type", "analysis")
+        .gt("created_at", oneHourAgo.toISOString())
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (cached?.report_data) {
+        return NextResponse.json({ success: true, report: cached.report_data, cached: true });
+      }
+    } else if (cachedUsername) {
       const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
       const { data: cached } = await supabase
         .from("reports")
@@ -90,24 +185,41 @@ export async function POST(request: NextRequest) {
   try {
     // 3. Parse request body
     const body = await request.json();
-    const { username, manualData, platform = "instagram" } = body as {
+    const { username, manualData, platform = "instagram", connectedAccountId } = body as {
       username?: string;
       manualData?: ManualProfileInput;
       platform?: string;
+      connectedAccountId?: string;
     };
 
-    if (!username && !manualData) {
+    logInfo("analysis_started", {
+      requestId,
+      route: "analyze",
+      userId: user.id,
+      platform,
+      username: username?.replace(/^@+/, ""),
+      connectedAccountId,
+      source:
+        connectedAccountId ? "official_api" : manualData ? "manual" : "public_profile",
+    });
+
+    if (!username && !manualData && !connectedAccountId) {
       return NextResponse.json(
-        { success: false, error: "username or manualData is required" },
+        { success: false, error: "username, manualData, or connectedAccountId is required" },
         { status: 400 }
       );
     }
 
-    let profileData: InstagramProfile | ManualProfileInput | undefined;
+    let profileData: NormalizedProfile | ManualProfileInput | undefined;
+    let reportSourceType: "official_api" | "scraper" | "manual" = "scraper";
 
-    if (manualData) {
+    if (connectedAccountId) {
+      profileData = await getConnectedProfileData(supabase, user.id, connectedAccountId);
+      reportSourceType = "official_api";
+    } else if (manualData) {
       // Manual entry bypass — skip scraping
       profileData = manualData;
+      reportSourceType = "manual";
     } else if (username) {
       // 4. Scraper registry (INFRA-04, D-14, D-15)
       const scraper = getScraper(platform);
@@ -121,6 +233,13 @@ export async function POST(request: NextRequest) {
       const scraperResult = await scraper.scrape(username);
 
       if (!scraperResult.success) {
+        logError("analysis_scrape_failed", scraperResult.error, {
+          requestId,
+          route: "analyze",
+          userId: user.id,
+          platform,
+          username: username.replace(/^@+/, ""),
+        });
         if (scraperResult.requiresManualEntry) {
           return NextResponse.json(
             { success: false, requiresManualEntry: true },
@@ -195,6 +314,14 @@ export async function POST(request: NextRequest) {
       : await analyzeWithApi(profileData, nlpResult, trendResult);
 
     if (!analysis.success) {
+      logError("analysis_generation_failed", analysis.error, {
+        requestId,
+        route: "analyze",
+        userId: user.id,
+        platform,
+        username: username?.replace(/^@+/, ""),
+        connectedAccountId,
+      });
       return NextResponse.json(
         { success: false, error: analysis.error ?? "Analysis failed" },
         { status: 500 }
@@ -211,10 +338,12 @@ export async function POST(request: NextRequest) {
     try {
       await supabase.from("reports").insert({
         user_id: user.id,
-        platform: platform || "instagram",
-        username: username || "manual",
+        platform: "platform" in profileData ? profileData.platform : platform || "instagram",
+        username: profileData.username || username || "manual",
         report_type: "analysis",
         report_data: analysis.report,
+        source_type: reportSourceType,
+        connected_account_id: connectedAccountId ?? null,
       });
     } catch {
       // Cache write failure is non-fatal
@@ -222,18 +351,40 @@ export async function POST(request: NextRequest) {
 
     // Increment usage only on SUCCESS (failed analyses don't count)
     try {
-      await supabase.rpc("check_and_increment_usage", {
-        p_user_id: user.id,
-        p_limit: isPro ? 999999 : 3,
-      });
+      if (!usageLimitsDisabled) {
+        await supabase.rpc("check_and_increment_usage", {
+          p_user_id: user.id,
+          p_limit: isPro ? 999999 : 3,
+        });
+      }
     } catch {
       // Usage increment failure is non-fatal — user already got their report
     }
+
+    if (analysis.report) {
+      analysis.report.sourceType = reportSourceType;
+    }
+
+    logInfo("analysis_completed", {
+      requestId,
+      route: "analyze",
+      userId: user.id,
+      platform: ("platform" in profileData ? profileData.platform : platform) || "instagram",
+      username: (profileData.username || username || "manual").replace(/^@+/, ""),
+      connectedAccountId,
+      reportSourceType,
+      plan: isPro ? "pro" : "free",
+    });
 
     return NextResponse.json({ success: true, report: analysis.report });
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Unknown error occurred";
+    logError("analysis_unhandled_failure", error, {
+      requestId,
+      route: "analyze",
+      userId: user.id,
+    });
     return NextResponse.json(
       { success: false, error: message },
       { status: 500 }

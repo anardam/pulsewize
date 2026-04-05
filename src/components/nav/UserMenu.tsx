@@ -1,14 +1,15 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { LayoutDashboard, Settings, LogOut, ChevronDown, FileText } from "lucide-react";
+import { Home, Settings, LogOut, ChevronDown, FileText, Shield } from "lucide-react";
 import { createSupabaseBrowser } from "@/lib/supabase/client";
 
 interface Props {
   email: string;
+  isAdmin?: boolean;
 }
 
-export function UserMenu({ email }: Props) {
+export function UserMenu({ email, isAdmin = false }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -33,9 +34,10 @@ export function UserMenu({ email }: Props) {
   }
 
   const menuItems = [
-    { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-    { icon: FileText, label: "Reports", href: "/reports" },
+    { icon: Home, label: "Home", href: "/dashboard" },
+    { icon: FileText, label: "Report archive", href: "/reports" },
     { icon: Settings, label: "Settings", href: "/settings" },
+    ...(isAdmin ? [{ icon: Shield, label: "Admin", href: "/admin" }] : []),
   ];
 
   return (

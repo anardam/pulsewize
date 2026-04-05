@@ -4,27 +4,29 @@ import { useState } from "react";
 import { UpgradePrompt } from "./UpgradePrompt";
 import { CancelDialog } from "./CancelDialog";
 
-interface RazorpayInvoice {
+interface BillingInvoice {
   id: string;
-  amount: number; // paise/cents — divide by 100 for display
+  amount: number;
   currency: string;
-  status: string; // "captured" | "failed" | "refunded"
-  createdAt: number; // Unix timestamp (seconds)
+  status: string;
+  createdAt: number;
 }
 
 interface BillingSectionProps {
   plan: "free" | "pro";
   status: string;
   analysesUsed: number;
+  usageLimitsDisabled?: boolean;
   currentPeriodEnd: string | null;
   providerSubscriptionId: string | null;
-  invoices: RazorpayInvoice[];
+  invoices: BillingInvoice[];
 }
 
 export function BillingSection({
   plan,
   status,
   analysesUsed,
+  usageLimitsDisabled = false,
   currentPeriodEnd,
   providerSubscriptionId,
   invoices,
@@ -69,7 +71,9 @@ export function BillingSection({
         <div>
           <label className="block text-sm font-medium mb-1.5">Analyses this month</label>
           <p className="text-sm text-[#8a8580]">
-            {isPro ? (
+            {usageLimitsDisabled ? (
+              <span>Testing mode enabled - usage limits are currently turned off</span>
+            ) : isPro ? (
               <span>{analysesUsed} used — unlimited remaining</span>
             ) : (
               <span>
@@ -93,7 +97,7 @@ export function BillingSection({
           </div>
         )}
 
-        {/* Payment history (D-13) — invoice list with date, amount, status */}
+        {/* Payment history */}
         {invoices.length > 0 && (
           <div>
             <label className="block text-sm font-medium mb-1.5">Payment history</label>
@@ -115,14 +119,14 @@ export function BillingSection({
                   </span>
                   <span
                     className={`text-xs capitalize ${
-                      invoice.status === "captured"
+                      invoice.status === "paid"
                         ? "text-emerald-400"
-                        : invoice.status === "failed"
+                        : invoice.status === "open" || invoice.status === "uncollectible"
                           ? "text-red-400"
                           : "text-[#8a8580]"
                     }`}
                   >
-                    {invoice.status === "captured" ? "paid" : invoice.status}
+                    {invoice.status}
                   </span>
                 </div>
               ))}
@@ -132,7 +136,7 @@ export function BillingSection({
       </div>
 
       {/* Upgrade prompt (free users only) */}
-      {!isPro && (
+      {!isPro && !usageLimitsDisabled && (
         <div className="mt-4">
           <UpgradePrompt />
         </div>

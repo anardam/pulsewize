@@ -9,15 +9,6 @@ interface Props {
   usageCount: number;
 }
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.08, duration: 0.5, ease: [0.23, 1, 0.32, 1] },
-  }),
-};
-
 export function StatsCards({ totalReports, platformCount, plan, usageCount }: Props) {
   const usageLimit = plan === "pro" ? "unlimited" : "3";
   const usagePercent = plan === "pro" ? 0 : Math.min((usageCount / 3) * 100, 100);
@@ -62,10 +53,9 @@ export function StatsCards({ totalReports, platformCount, plan, usageCount }: Pr
       {stats.map((stat, i) => (
         <motion.div
           key={stat.label}
-          custom={i}
-          variants={cardVariants}
-          initial="hidden"
-          animate="visible"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: i * 0.08, duration: 0.5 }}
           className="group relative overflow-hidden rounded-xl border border-white/[0.06] bg-[#141414] p-5 hover:border-white/[0.1] transition-all duration-300"
         >
           <div className={`absolute inset-0 bg-gradient-to-br ${stat.accent} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />

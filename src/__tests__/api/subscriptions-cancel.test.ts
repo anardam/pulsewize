@@ -5,24 +5,24 @@ vi.mock("@/lib/supabase/server", () => ({
   createSupabaseServer: vi.fn(),
 }));
 
-// Mock Razorpay client
-vi.mock("@/lib/razorpay/client", () => ({
-  razorpay: {
+const mockStripeUpdate = vi.fn();
+vi.mock("@/lib/stripe/server", () => ({
+  getStripe: vi.fn(() => ({
     subscriptions: {
-      cancel: vi.fn(),
+      update: mockStripeUpdate,
     },
-  },
+  })),
 }));
 
 import { POST } from "@/app/api/subscriptions/cancel/route";
 import { createSupabaseServer } from "@/lib/supabase/server";
-import { razorpay } from "@/lib/razorpay/client";
 
 function makeRequest() {
   return new Request("http://localhost/api/subscriptions/cancel", { method: "POST" });
 }
 
 const mockProSub = {
+  provider: "stripe",
   provider_subscription_id: "sub_test123",
   plan: "pro",
   status: "active",
@@ -80,14 +80,14 @@ describe("POST /api/subscriptions/cancel", () => {
         }),
       }),
     });
-    (razorpay.subscriptions.cancel as ReturnType<typeof vi.fn>).mockResolvedValue({});
+    mockStripeUpdate.mockResolvedValue({});
     const res = await POST(makeRequest() as unknown as import("next/server").NextRequest);
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body.success).toBe(true);
   });
 
-  it("calls razorpay.subscriptions.cancel with cancelAtCycleEnd=true", async () => {
+  it("calls stripe.subscriptions.update with cancel_at_period_end=true", async () => {
     (createSupabaseServer as ReturnType<typeof vi.fn>).mockResolvedValue({
       auth: { getUser: async () => ({ data: { user: { id: "user1" } } }) },
       from: () => ({
@@ -96,12 +96,14 @@ describe("POST /api/subscriptions/cancel", () => {
         }),
       }),
     });
-    (razorpay.subscriptions.cancel as ReturnType<typeof vi.fn>).mockResolvedValue({});
+    mockStripeUpdate.mockResolvedValue({});
     await POST(makeRequest() as unknown as import("next/server").NextRequest);
-    expect(razorpay.subscriptions.cancel).toHaveBeenCalledWith("sub_test123", true);
+    expect(mockStripeUpdate).toHaveBeenCalledWith("sub_test123", {
+      cancel_at_period_end: true,
+    });
   });
 
-  it("returns 500 if Razorpay SDK throws", async () => {
+  it("returns 500 if Stripe SDK throws", async () => {
     (createSupabaseServer as ReturnType<typeof vi.fn>).mockResolvedValue({
       auth: { getUser: async () => ({ data: { user: { id: "user1" } } }) },
       from: () => ({
@@ -110,7 +112,7 @@ describe("POST /api/subscriptions/cancel", () => {
         }),
       }),
     });
-    (razorpay.subscriptions.cancel as ReturnType<typeof vi.fn>).mockRejectedValue(new Error("Razorpay error"));
+    mockStripeUpdate.mockRejectedValue(new Error("Stripe error"));
     const res = await POST(makeRequest() as unknown as import("next/server").NextRequest);
     expect(res.status).toBe(500);
     const body = await res.json();

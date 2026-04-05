@@ -13,27 +13,18 @@ type HealthStatus = "ok" | "degraded" | "down" | "loading";
 const PLATFORMS = [
   { id: "instagram", name: "Instagram", color: "#E1306C" },
   { id: "youtube",   name: "YouTube",   color: "#FF0000" },
-  { id: "twitter",   name: "Twitter/X", color: "#1DA1F2" },
-  { id: "tiktok",    name: "TikTok",    color: "#69C9D0" },
-  { id: "linkedin",  name: "LinkedIn",  color: "#0A66C2" },
   { id: "facebook",  name: "Facebook",  color: "#1877F2" },
 ] as const;
 
 const defaultHealth: Record<string, HealthStatus> = {
   instagram: "ok",
   youtube: "ok",
-  twitter: "ok",
-  tiktok: "ok",
-  linkedin: "ok",
   facebook: "ok",
 };
 
 const loadingHealth: Record<string, HealthStatus> = {
   instagram: "loading",
   youtube: "loading",
-  twitter: "loading",
-  tiktok: "loading",
-  linkedin: "loading",
   facebook: "loading",
 };
 
@@ -56,7 +47,7 @@ export default function PlatformGrid({ selectedPlatform, onSelect }: Props) {
   }, []);
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
       {PLATFORMS.map((p) => (
         <PlatformCard
           key={p.id}
